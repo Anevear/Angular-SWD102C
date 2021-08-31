@@ -1,0 +1,10 @@
+>>>>>> had me update my Nodejs.
+
+Angular (md by google) :: a client-side framework designed for building Single Pg Apps (SPA's), allows app creation across multiple platforms.
+Angular uses a superset of JS called TypeScript (created by MS) TSC compiles fo plain JS which is why its called a superset.
+TSC(vs JS) adds new ft., func, and rules to the lang to mk code more predictable, & error prevention. Some of the adds from TSC that got integrated into the latest JS* (1 ex: classes) Most prominent(&popular) ft. of TSC is the ability to use static types whne prog to let the compiler to throw an error b4 exe the code. leads to less time debugging and the ability to reason about code faster
+
+*tsc's class ft was popular that js decided to add it as well
+TypeScript Compiler = TSC
+
+project folder created, package.json created, in the obj I created the start script is the part that runs the tsc 
