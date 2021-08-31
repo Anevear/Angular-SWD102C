@@ -7,4 +7,47 @@ TSC(vs JS) adds new ft., func, and rules to the lang to mk code more predictable
 *tsc's class ft was popular that js decided to add it as well
 TypeScript Compiler = TSC
 
-project folder created, package.json created, in the obj I created the start script is the part that runs the tsc 
+project folder created, package.json created, in the obj I created the start script is the part that runs the tsc. Its going to ru ntsc in the terminal 1sts, then its going to run node index.js. the tsc will take and file that ends w/ .ts or .tsx and compile it n2 JS. the TSC is going to output a file w/ the same name and a .js ext in the same directory as the .ts version. once tsc has finished the script will then cont to run the code w/i the index.js file using node.
+
+now a .ts file will need to be complied into JS b4 its understood by a browser
+
+1 of the fundamental purposes for the creation of TSC is the support of static typing. JS is dynamic but its a weakly-typed lang this means that prog in JS dsnt req the dev to specify the type of value used. The type of data can be changed later in the src codee or during the exe of the prog which could very well be unintended. TSC changes this by adding typings support and making the lang strongly typed as you  would see in JS or C#. W/ this ft. you declare types and the compiler checks that the correct *type* of values are being used. If no type is spec it will be inferred from ur code. essentially means that you eed to keep track of what type of dat is being assigned to the vars.
+
+**also important to note is bc tsc is compiled into JS the benefit si for the dev in that once its been compiled the code becomes merely JS
+
+
+<<<______COMMON TYPES______>>>>>
+
+>> Boolean :: true or false value
+>> Number :: all numeric vals are rep by the number type, this incl integers, floats, dec, etc
+>> String :: textual data. just like js strings can be surrounded by single quotes (''), dbl quotes (""), or backticks (``)
+>> Array :: grouping of vals. can b written 2 ways: number[] or Array<number>. Best prac for this is to keep arrays of only one type, even in JS
+>> Any there may be a time when a type is needed but currently unkn; any (as a type) is used for this. The any type allows you to opt-out of type-checking during the compile-time checks. ***Using ANY is commonly frowned upon and should not be used if it can be avoided. If the type cnt b det its a sign that the prob may need 2 b briken down n2 smaller pieces
+>> Void :: the polar opp of any. instead of returning any data type, void will return nothing. Its used w/ funcs that DNT return any val
+>> Null & Undef :: in TSC, these 2 have their own data types respectively. when NOT using the strictNullChecks flag in the tsconfig.json both are subtypes of the other types, meaning you can assign a null val to a number or a string. both can only be asgnd to void and their own respective dat types.
+
+
+** those are just the most widely used dat types for more ref go to https://www.typescriptlang.org/docs/handbook/basic-types.html
+
+the examples in the ts proj file will have type declarations that will speci the type to be used byt the va. if the val chaned it would need to correspond to the type specified
+
+const sandwich: string = 'BLT';
+const orderNumber: number = 1476;
+const delicious: boolean = true;
+
+abv the types are def after the var name and to do so you need to write the var name incl a ' : " (colon) after the var name and finally the type needed for the var before the = followed by w/e info
+
+now in ex 2 in the .ts 
+1st the func is def by function and is named orderFood
+2nd the param are def w/i the () there are 2. sandwich and orderNumber
+         ea param has a type def. sandwich is a string and orderNumber is a number
+3rd after the param the type of the function itself is def as void
+         the syntax : void is loc AFTER the () that hold the param and b4 the {}
+         in this case the func dsnt return anything except for a console.log so the type is void--- console.log itself dsnt have a type of anything whish is y the func is returning a type of 'VOID'
+then ofc there is the console.log sending the msg to the console incl both param
+
+b/c TSC is compiled down to JS the types are removed. 
+
+>>> to make all this do stuff type npm start after saving the files the terminal will send a msg that its doing the things and tht the .js has been compiled
+
+after the .js is compiled by the tsc when you open it it will have 'use strict'; before the function is copied n2 it W/O the dat type declarations. that will be at ln 1 and NOT b4 ea and every thing pulled from the .ts and n2 the .js 
