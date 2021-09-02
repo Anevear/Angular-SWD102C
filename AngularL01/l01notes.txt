@@ -51,3 +51,103 @@ b/c TSC is compiled down to JS the types are removed.
 >>> to make all this do stuff type npm start after saving the files the terminal will send a msg that its doing the things and tht the .js has been compiled
 
 after the .js is compiled by the tsc when you open it it will have 'use strict'; before the function is copied n2 it W/O the dat type declarations. that will be at ln 1 and NOT b4 ea and every thing pulled from the .ts and n2 the .js 
+
+if you try to  put in a val tht dsnt match the type decl (smthng illegal) like put a num as the vl of a string tsc will report an err when compiled
+
+const tasty: boolean = 'that was delicious';
+
+the snippet abv will return an err since its def as a boolean but it val is a string. typically intellisense will warn you tht the code is incorrect if you run npm start terminal will show the err
+
+index.ts:1:7 - error TS2322: Type ''that was delicious'' is not assignable to type 'boolean'.
+that will b pt of the err followed by
+npm ERR! [w/e err is on several line prefaced by the npm err]
+** its important to read & understand the errs in the terminal.
+
+>> Typecasting :: a way to convert num -> string & vice versa
+
+ex 3 num -> string in code w/ toString()
+ex 4 string -> num in code w/ parseInt()
+
+>>> Type Assertion allows you to def the type of the data officially. when the compiler reads ur tsc code it cnt assume nethn; it knows the dat type thts expected. assertion is an Explicit typecasting so when the compiler dsnt know the type u cn use type assertion to def how it should be cast
+
+var fred = {};
+fred.age = 57; // error: property 'age' does not exist on '{}'
+fred.name = "Fred Griffin"; // Error: property 'name' does noe exist on '{}'
+
+that is an error code. fred is an empty obj the next 2 lns are trying to give vals to properties that dont exist w/i hence the err. its an assumption that the compiler cnt mk to overide def an interface and then give fred a type assertion by using 'as' kywd see ex 5 another way to use type assertion w/ ex 5 info below w/ <> syntax
+
+const personName: any = 'Fred Griffin';
+const fredName = <string>personName;
+
+tht has the type of any tht is then overwritten to be a string set to the var name
+
+more abt type assertion  https://basarat.gitbooks.io/typescript/docs/types/type-assertion.html.
+
+
+interfaces
+ in tsc using a typing sys is one of the main principles while def types is very useful its also helpful to allow for the def of a structure which can incl serveral properties 3ea with their type def interfaces are essentially blueprints of types that are easily reused or updates throughout ur app. they are similare to JS obj bc they contain a property and a value but the val in an interface is the type def of the property interfaces are only a part ot TSC and *NOT* JS so once its complied into the .js they wont exist in it. 
+
+ex 6
+1st the interface is def
+2nd the function makeASandwich is def. what is diff in this is tht the function takes in one param (ingredients) and the type def for that param is the interface created.
+         > rather than having 3 params and defining ea of their types separately, you can set them w/i an interface and use the entire interface as the type
+         > the function also incl a cons.log that uses the props w/i the param to send back a msg w/ the val defd & b/c the func only incl a cons.log it has a return type of void
+3rd an obj is created named sandwichIngredients that has the same props as the ingredientsBasket interface but bc this is an actual obj, the vals are the actual vals needed to create a sanwich not the type def (the types of vals are the same as the interface types)
+4th (and last) the func is invoked with the sandwichIngredients as its one param 
+
+now bc the func uses the ingredientsBasket interface as its type ea of the vals w/i the sandwichIngredients obj *must* b the same type as what was def in the interface
+
+** oft interfaces are def in their own files and then imported n2 other files where they are needed, this allows for a very org app. for these lessons they are kept in the index.ts file
+
+so far the prop def w/i the interfaces have been req in ex 6 where the ingredientsBasket as the tpye for the param of the func ea prop def w/i that interface *must* be def when the func is invoked.for ex if only 2 2 of the 3 props were def in the sandwichIngredients obj tsc would give an error when the code is run. if at any point you decide that a prop w/i an interface dsnt necessarily need to be def optional properties come n2 play
+when using optional properties the ' ? ' is used to denote an optional property see ex
+
+interface ingredientsBasket {
+         numOfItems: number;
+         ingredients: string[];
+         calories?: number;
+}
+
+in the interface abv adding a ? b4 the : makes the calories property optional if this snippet of code is used you wouldnt have to def the num of calories, it could be omitted bc of the ?
+
+Readonly Properties can be asgnd like the optional props. readonly means the once the prop is asgnd it *cannot* b reassigned sometimes its necessary for a few props only to be asgnd a val when an obj is first created to make a readonly prop, you add the readonly kywd b4 the prop name 
+
+interface ingredientsBasket {
+         readonly numOfItems: number;
+         ingredients: string[];
+         calories?: number;
+}
+
+since the numOfItems is readonly the following code cnt b denote
+
+let club: ingredientsBasket = {
+         numOfItems: 3;
+         ingredients: ['Turkey', 'Ham', 'Bacon']
+};
+club.numOfItems = 'My Favorite';
+
+an err will say numOfItems can not be asgnd due to it being a readonly prop
+
+In TSC when using an interface w/ a class you use the implement kywd to implement the interface into a class the most common use of an interface in strongly typed langs like C# and Java is to enforce that a class meets a particular structure. TSC classes are very similar to JS classes but bc interfaces exist in TSC and not JS, TSC classes can work w/ interfaces see ex 7
+
+in ex 7 the prop and type need to redef w/i the class. this is bc implementing an interface n2 a class is diff from inheriting. Just bc the kywds implements Lifespan dsnt mean that the prop and types w/i the interface will be inherited n2 the class. *** the interface is just a blueprint
+** Date is a blt-in JS obj that will take in a date and turn it n2 a spec format (ex. January 1, 1970 00:00:00 UTC) these *must* be instantiated by def the parts of the date.
+
+methods can be define w/i interfaces which can then be implemented by a class. updating ex 7 to incl a method that prints the date in clean format.
+
+the output from ex 7 would be::  Sat May 12 2018
+
+classes can implement multiple interfaces. when implementing multiple interfaces into a class you must separate them by a comma ( ,) In ex 8 class Bat implements the Animal, Mammal, and WingedAnimal interfaces.
+
+in ex 8 bc the class is implementing ea of the interfaces, it is using the methods loc w/i the interfaces.
+
+>>>>> Quizz question: the following is NOT valid for def class Dog that implements the Animal interface
+
+interface Animal {
+         species: string;
+}
+class Dog implements Animal {
+
+}
+
+BECAUSE the species property must be (re)def in the Dog class. An interface is simple a blueprint.
