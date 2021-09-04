@@ -1,0 +1,9 @@
+{
+         "name": "Lesson-Two",
+         "version": "1.0.0",
+         "description": "A proj 4 testing TSC in L02",
+         "main": "index.js",
+         "scripts": {
+                  "start": "tsc && node index.js"
+         }
+}

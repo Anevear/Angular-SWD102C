@@ -1,0 +1,143 @@
+In L01 tsc classes implementing interfaces were intro w/ little explanation to classes themselves
+b4 ES6 classes in JS essentially didnt exist. Funcs and prototypes were oft used in their place but there was no official approach to classes and prototype-based OOP since ES6 was non existent tsc was created to incl classes as well as several other fts tht the creators of TSC felt should be a part of JS 
+w/ the creation of ES6 a lot of the same fts were incl w/ the help of transpilers like Babel. There are 2 ways to def a clacss in TSC thru declaration or expression.
+
+Before ES2015 prototypes
+
+function Person (first, last, age, eyeColor) {
+         this.firstName = first;
+         this.lastName = last;
+         this.age = age;
+         this.eyeColor = eyecolor;
+}
+var myFather = new Person("John", "Doe", 50, "blue");
+var myMother = new Person("Sally", "Ride", 48, "green");
+
+After ES2015 classes came about
+
+class Person {
+         constructor(first, last, age, eyeColor) {
+                  this.firstName = first;
+                  this.lastName = last;
+                  this.age = age;
+                  this.eyeColor = eyecolor;
+         }
+}
+var myFather = new Person("John", "Doe", 50, "blue");
+var myMother = new Person("Sally", "Ride", 48, "green");\
+
+essentially it looks the same and things are happening behind the scenes. they also do the same thing.
+
+>>>>>> Class Declaration :: when creating a class you can declare it by using the class kywd forllowed by the namd of the class itself.
+
+Below is the most common way of creating a class in a .ts
+
+class Rectangle {
+         height: number;
+         width: number;
+         constructor(height: number, width: number) {
+                  this.height = height;
+                  this.width = width;
+         }
+         perimeter() {
+                  return (this.height * 2) + (this.width * 2);
+         }
+}
+var square = new Rectangle(2,2);
+console.log(square.perimeter());
+
+
+this has 3 parts w/i {}
+> 2 props - height and width - are ea decl as a number
+> a constructor
+> a method named perimeter that multiplies the height and width props by 2 and then adds them together
+
+Another way to create a class is by creating a class expression. done in one of 2 ways: name or unnamed. both look very similar to creating a var
+
+Unnamed ::: instead of decl the class a var is created and set to the class itself. it dsnt have a name only the var does.
+
+const Rectangle = class {
+         height: number;
+         width: number;
+         constructor(height: number, width: number) {
+                  this.height = height;
+                  this.width = width;
+         }
+         perimeter() {
+                  return (this.height * 2) + (this.width * 2);
+         }
+}
+var square = new Rectangle(2,2);
+console.log(square.perimeter());
+
+Named ::: the only dif to the abv is that the class is named loc after the class kywd.
+
+const Rectangle = class Rectangle {
+         height: number;
+         width: number;
+         constructor(height: number, width: number) {
+                  this.height = height;
+                  this.width = width;
+         }
+         perimeter() {
+                  return (this.height * 2) + (this.width * 2);
+         }
+}
+var square = new Rectangle(2,2);
+console.log(square.perimeter());
+
+Constructors are not req (they are optional) the class constructor isa  unique method that is used for creating and initializing an obj of a class. when using a constructor w/i a class you can only have *one* constructor per class. Otherwise youll get an err. when working w/ a constructor you can use the super kywd to access constructors from Parent class (you can extend a class from another class)
+ for more detailed info on constructors go to the MDN web docs.
+
+ A thing to consider when creating a class is hoisting. When decl funcs they generally get hoisted, meaning you can use the func b4 its decl in the code. when the TSC complies the decl move to the top so the func is decl b4 being called. In the case of classes the class needs to be def B4 its used.
+
+ console.log(multiplyValues(5,6));
+
+ function multiplyValues(a,b) {
+          return a * b;
+ }
+
+ the anv works bc the func def will be processed b4 the console.log() func is exe. thats what is called hoisting. Var decls using the var kywd and func decl are processed by the JS engine 1st, regardless of where they appear w/i the script file. classed dont hoist.
+
+ Clases dont work that way, they must be decl b4 you can use it. the following will cause an err.
+
+ var example = new mathExample();
+ console.log(example.multiplyValues(5,6));
+ class mathExample {
+          multiplyValues(a,b){
+                   return a * b;
+          }
+ }
+
+ moving the class to the top of the script WILL work.
+
+ class mathExample {
+    multiplyValues(a, b) {
+        return a * b;
+    }
+}
+var example = new mathExample();
+console.log(example.multiplyValues(5, 6));
+
+Instantinate a Rectangle class in the .ts
+> the class Rectangle is decl with height and width props, a constructor, and a method perimeter()
+> next the constant named myYard instantinates the class by way of the new kywd. this is where the vals for the param are provided
+> finally theres the log w/ the myYard and since myYard is a new instance of the Rectangle class it can access the perimeter() method def w/i.
+
+if you just console.log(myYard) (w/o) calling the perimeter() method. the output would be :: Rectangle { height: 24, width: 32 }
+
+interfaces can be used to extend one anotherr and this allows you to copet the members of one interface n2 another and add additional props n2 the new interface. when extending multiple interfaces they are sep by a ( , ) When implementing an interface into a class remember that you have to redef the props w/i the class bc interfaces are just blueprints of the info.
+
+In the SuperHero class all props that live in ea of the 3 interfaces but only the Powers interface. following the class def an instance of the class is created and asgnd 2 the var frozone aft extending the Person and Flyable interfaces n2 the Powers interface a class is created that *only* implements the Powers interface as shown in the code.
+
+output of ex 3 would be :: 
+Equilateral {sides:3, angles:[60,60,60]}
+
+output of ex 4 would be ::
+{isdes:3, angles:[60,60,60]}
+
+ex 3 is a demonstrable ex of classes, implementing, and interfaces using the implements kywd. ex 4 creates a new obj instead of creating a new class. Since the interface Triangle extends Shape2 the obj type of Triangle2 using the <> syntax
+
+Quiz question:: When extending an interface, you must re-enter the same properties and methods of the interface that is being extended. ---- false. There would be no pt to extending an interface if you needed to do this.
+
+When working w/ classes the essential ft is inheritance, allowing for the use of a classes props, methods, and info from one class w/i another w/o having to redef whats in the existing class. A new rectangle class followed by a square class that extends the rectangle which then has a method area. in ex 5
