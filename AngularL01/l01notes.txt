@@ -13,6 +13,8 @@ now a .ts file will need to be complied into JS b4 its understood by a browser
 
 1 of the fundamental purposes for the creation of TSC is the support of static typing. JS is dynamic but its a weakly-typed lang this means that prog in JS dsnt req the dev to specify the type of value used. The type of data can be changed later in the src codee or during the exe of the prog which could very well be unintended. TSC changes this by adding typings support and making the lang strongly typed as you  would see in JS or C#. W/ this ft. you declare types and the compiler checks that the correct *type* of values are being used. If no type is spec it will be inferred from ur code. essentially means that you eed to keep track of what type of dat is being assigned to the vars.
 
+**typing as def here is similar to typing as in blood typing, *NOT* keyboard typing.
+
 **also important to note is bc tsc is compiled into JS the benefit si for the dev in that once its been compiled the code becomes merely JS
 
 

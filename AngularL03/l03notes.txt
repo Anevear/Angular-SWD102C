@@ -1,0 +1,37 @@
+This is a big one. up to this point its just been using the console cli. for this project and for this course gettingto know the Angular CLi to help with Angular dev. can be used in a very similar way to other cli. used to create a proj, add files, and perf a variety of tasks *essential* fo the dev of an Angular proj.
+
+need to have at least Node ver 8.9 and NPM 5.5.1
+
+all this is going to make app dev faster and easier to maintain rather than doing everything by hand.
+
+2 Reiterate: Angular is a strutural framework for dynamic web apps. lets you use prev knowledge of html to create a template for other components. It provides lots of out of the box fts that would otherwise need to be created andimplemented w/ a metric f_k toon of JS, w/ options like data binding and dependency injection. Is been in prod since 20 Oct '10 and cont 2 grow since is it open src. (everything so far in these lessons are compatible with ver 2.0 or higher (aka Angular2) but not Angular 1.0 or more commonly AngularJS) As so succinctly put: By using Angular devs can access sp. ft.s and more w/o having to reinvent the wheel.
+
+
+Now for the setup up. Open cmd/terminal (WIN/OSX) and type in: npm install -g @angular/cli 
+that installs Angular CLI tool globally
+now prev i was creating new folders using the mkdir cmd w/ angular installed type in: ng new AngularL03  (file name structure ive been using in my lessons)
+ng is the cmd that spec that you want to use the angular cli (like npm)
+new is the option for creating a new proj and is followed byt the name of the proj (this case AngularL03) it will take time to generate the proj. aside from the e2e (since the course is a a little dated at times) the structure of the proj is as follows:::
+From top to bottom, the structure of the project is as follows:
+
+>> e2e: End-to-end testing, also known as UI testing, is used to explore the application as users experience it. In e2e testing, one process runs the application, and another process runs protractor tests that simulate a user going through the application.
+>> node_modules: The folder that all node dependencies are stored in. If at any point you do not have this folder, simply run npm install and it will download the dependencies specified in the package.json.
+>> src: This is the most important folder in the application to a developer, this is where the source code for the application resides. Because of this, it is where developers will spend most of their time.
+         >>app: Angular application files will go into the app folder. This is where you will spend most of your time when working with Angular.
+                  >> Notice the way this folder's files are laid out. The app component has a .html, .css, .spec.ts, and .ts file, this is the basic structure of Angular components. As you create new components, they will follow this basic formula. The app.module.ts is the heart of the Angular application, this is where the components, services, directives, and anything else created for your application will be connected and served out of.
+         >> assets: Where all your media for the project should be stored and served from.
+         >> index.html: The main HTML page to be served when a user navigates to your URL, this is the HTML that will serve up the Angular application.
+         >> main.ts: The main source of TypeScript for your application, and this is the central hub for the Angular application that ties everything together.
+         >> style.css: The main CSS file to store your global styles should you have any.
+>> package.json: Used to identify the npm packages being used in the project. It also contains command scripts for running the application, running tests, and more.
+>>> The rest of the files are the configuration for the project, testing, typescript, and linting.
+
+from the integrated terminal ([ctrl] + `) the following cmd will start the server and run the app
+ng serve --open
+like stated prev its been npm start to run files, the cmd abv will start the server incl with the angular app
+>> ng serve will build the proj so that its rdy 2b serverd to the browser
+>> --open flag will open it in your default browser in watch mode meaning and you make changes to the src code it will auto update in the browser
+
+*** IMPORTANT NOTE :: once the server is running you need to use the kybd shortcut [ctrl] + C in the terminal to stop the server (both MAC& WIN) anytime you want to install new pkgs, use the Angular CLI cmds, or are finished working on the proj. It will ask if you want to terminate the batch job, Y/N? Y. In practice no new proj can be opened when if you still have one running unless you assign it to a new port id how to do that just yet nor am taking the time to atm 
+
+{{ title }} :: the dbl {} (aka handlebars) is what is called a binding, this is a 1-way binding. info is being bound to the html from the class but the html is ot sending anything back. The title prop fo the AppComponent class is being bound to the loc where you find " {{ title }}
