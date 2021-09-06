@@ -141,3 +141,147 @@ ex 3 is a demonstrable ex of classes, implementing, and interfaces using the imp
 Quiz question:: When extending an interface, you must re-enter the same properties and methods of the interface that is being extended. ---- false. There would be no pt to extending an interface if you needed to do this.
 
 When working w/ classes the essential ft is inheritance, allowing for the use of a classes props, methods, and info from one class w/i another w/o having to redef whats in the existing class. A new rectangle class followed by a square class that extends the rectangle which then has a method area. in ex 5
+
+this.height and this.width are accessibe by the Square class bc it extended the rectangle class so those props did not need to be declared again.
+> var newSquare is a new instance of the Square class with teh def height and width
+> var area is set to the val returned by the area() method of the Square class via the newSquare instance
+> var perimeter is set to the val returned byt the perimeter() method of the Rectangle class via the newSquare instance possible bc Square extends Rectangle and everything w/i the latter class is accessible tks to the extends kywd.
+
+When working with classes there is the option to use one of 3 kywds for the props and methods w/i the class. public, private, and protected.
+
+
+>>>> Public :: by default all the props amd methods are public meaning they can be accessed freely thru the prog. if needed you can explicitly def ea prop as such with the public kywd
+
+class Rectangle {
+    public height: number;
+    public width: number;
+    public constructor(height: number, width: number) {
+        this.height = height;
+        this.width = width;
+    } ETC.
+
+
+>>>> Private :: when a member of a class is marked private it cnt be accessed from outside of the containing class.
+
+class Rectangle {
+    height: number;
+    width: number;
+    constructor(height: number, width: number) {
+        this.height = height;
+        this.width = width;
+    }
+
+    private perimeter() {
+        return this.height * 2 + this.width * 2;
+    }
+}
+
+new Rectangle(23, 32).perimeter(); // Error: 'perimeter' is private
+
+In this case if it were in the code the Square class would not be able to access the perimeter() method
+
+
+>>>> Protected :: this kywd acts much like the private kywd only giving access to derivitive classes but not outside of that. 
+
+using the rectangle and Square exs declaring perimeter() as protected allows the Square tht extends Rectangle to use it.
+
+A significant component of Software Engineering is creating reusable code. in trad compiled langs like Java and C# one of the primary tools to create these reusable components is generics. Genrics can work over a variety of types rather than a single one which allows users to consume these components and use their types and since tsc is compiled generics are used.
+while the 'any' type is technically generic info about the type when the val is returned from the func is lost. So if a string were to be passed in the func will have no idea that is a string only that it could be any type.
+
+ex a
+function identity(argument:any): any{
+         return argument;
+}
+
+Now while the abv is technically generic it is not a 'Generic' as it is defined.
+
+ex b
+function identity<T>(argument:T):T{
+         return argument;
+}
+
+ex b *IS* a generic function bc it works over a range of types but also tells the compiler to keep track of the type that is passed in initially. now info isnt lost.
+
+
+Ex 6: switch_case stmt is checking to see what type of argument is passed in using the typeof op, it returns a string containg what the var type is and the val of what was passed in. >>>> identifyType <<<<
+
+When working w/ generics the compiler forces you to treat the func as if you have no idea what type is going to be used. so if you were to try to use a .length prop (spec to arrays) an err. if the type is generic the compiler dsnt know if an array is passed so it dsnt even know if it can access the .length prop
+
+ex c 
+function identity<T>(argument:T):T{
+         console.log(argument.length);
+         return argument;
+}
+
+ex will retun an err in both the file (the red squiggly line) and the output
+
+the err msg would read Property 'length' does not exist on type 'T'.
+
+ex d **** <T> is just a name T is not something with meaning I couldve used any letter of my choosing
+
+function identity<T>(argument:T[]):T[]{
+         console.log(argument.length);
+         return argument;
+}
+
+If you know that youll be working w/ array, just not the type of array you can spec like the abv so that the proper access to the necessary props and methods are avail
+
+there are 2 ways to write arrays in tsc
+> the type of ele followed by the []
+let groceryList:string[]=['bread','milk','butter','deli meat'];
+
+> or w/ a generic array type using Array<elemType>
+let groceryList:Array<string>['bread','milk','butter','deli meat'];
+
+>>>>>>>>> Generic Extending interface
+a generic that extends from an interface so that the type of the generic matches the interface. the func below is able to access the .length prop bc of the interface
+interface lengthProp{
+         length:number;
+}
+function identityCheck<T extends lengthProp>(argument:T):T{
+         console.log(argument.length);
+         return argument;
+}
+BC the generic func is now constrained byt the interface it will only work over types that have the length property.
+
+>>>>>>>>> Decorators :: provide a way to add functionality to parts of an application or program and are used extensively in Angular. Decorators, denoted but the @ sign, are funcs (incl necessary param) that are eval by anonther func at runtime w/ info about the decl.
+
+> Decorators are called when the class is decl, *NOT* when an obj is instantiated
+> Multiple decorators can be def in the same class; on properties, methods, or parameters
+
+____ A *valid* decorator should be:
+> Assignable to one of the following decorator types:(Class|Property|Method|Parameter)
+> Return a values that is assignable to the decorated values
+
+When implementing decorators there are diff param needed based on the type of decorator. for the time being the focus will be on the 3 prominent ones: Class, Property, and Method decorators.
+
+>>>> Method Decorators :: req the 3 following param
+> target: the prototype(Object) of the class
+> propertyKey: the name(string) of the method being decorated
+> descriptor: a descriptor(PropertyDescriptor) of the given propert if it exists on the obj, otherwise undef.
+
+The following method decorator can be used to implement logging inside an app. The function declaration and the *3* spec param are what make is a decorator.
+
+function methodDecorator(target:Object, propertyKey:string, descriptor:PropertyDescriptor): any {
+         let oldValue= descriptor.value;
+
+         descriptor.value= function(){
+                  console.log(`Calling ${propertyKey} with`, target);
+                  let value= oldValue.apply(null,[arguments[1],arguments[0]]);
+
+                  console.log(`Function is executed`);
+                  return value +';Decorators are crazy!';
+         };
+         return descriptor;
+}
+
+>>*** NOTE!!! :: ` (w/ ~, the tilde), is used and NOT simply a single quotation ' --- I tried to run the npm start before and it never showed my chosen param only exactly ${arg1} instead. saw that the use of ` instead of ' was refered to as a string literal rather than just a string
+
+also notice in ex 7 the output reflects the console logging inside of the class as well as inside of the decorator. W/ this ex Ive just annotated a function w/ a method decorator and now the console.log has added text.
+
+>>>>>> Property and Class Decorators :: when working in Angular, there are types of decorators otehr then method decorators, that can be created and used when needed.
+> Property Decorators: Property decorators are similar to method decorators but PROPERTY decorators only req 2 param (METHOD Decorators req 3):
+         > target: the prototype of the class
+         > propertyKey: the name (string) of the method being decorated
+> Class Decorators: class decorators allow you to modify the constructor of a class by either changing or adding new properties and methods to the class in question. CLASS decorators only req *ONE* param.
+         > target: the prototype of the class.

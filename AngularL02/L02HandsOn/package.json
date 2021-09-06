@@ -1,0 +1,9 @@
+{
+         "name": "Lesson-Two-HandsOn",
+         "version": "1.0.0",
+         "description": "Lesson 2 Hands on 4 Angular course",
+         "main": "index.js",
+         "scripts": {
+                  "start": "tsc && node index.js"
+         }
+}
