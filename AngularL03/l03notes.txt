@@ -35,3 +35,4 @@ like stated prev its been npm start to run files, the cmd abv will start the ser
 *** IMPORTANT NOTE :: once the server is running you need to use the kybd shortcut [ctrl] + C in the terminal to stop the server (both MAC& WIN) anytime you want to install new pkgs, use the Angular CLI cmds, or are finished working on the proj. It will ask if you want to terminate the batch job, Y/N? Y. In practice no new proj can be opened when if you still have one running unless you assign it to a new port id how to do that just yet nor am taking the time to atm 
 
 {{ title }} :: the dbl {} (aka handlebars) is what is called a binding, this is a 1-way binding. info is being bound to the html from the class but the html is ot sending anything back. The title prop fo the AppComponent class is being bound to the loc where you find " {{ title }}
+fixin shit.
