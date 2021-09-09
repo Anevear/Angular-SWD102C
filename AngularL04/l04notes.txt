@@ -1,0 +1,561 @@
+In the case of this lesson there is so much manipulation w/i code that Im going to copy verbatim to start w/ and then come thru once im sure ill meet my due dates before I turn it into me-speak so that I can ref it later on other proj
+
+
+Overview
+Components, signified by the decorator @Component, are the most fundamental building blocks in developing the User Interface of an Angular application. An Angular application is simply a collection of Angular components. Before you dive into components, please follow the setup instructions located on the following page.
+
+
+
+Setup
+For the rest of the course, you will be adding onto the portfolio project you created in the previous lesson, if you feel confident that all of your code is correct from the last lesson, feel free to continue to use your current project. It is, however, suggested that you download and unzip the following starter project for you to use. This way, you will not need to worry if the code is working or not. The starter project below is a portfolio about Margaret Hamilton who was the Lead Software Engineer for the Apollo 11 mission to the moon.
+
+Start off by downloading the starter project and unzipping it. The starter project will be in a folder named angular-L4-starter.
+
+Starter Project
+
+Next, move the starter project folder to the FEFAngular folder and rename it from angular-L4-starter to AngularL04.
+
+Open up your command prompt/terminal.
+
+Run the following to navigate to your Desktop
+
+cd Desktop
+Navigate to the FullStackWeb directory in your terminal.
+
+cd FullStackWeb
+Then, navigate to the FEFAngular directory in your terminal.
+
+cd FEFAngular
+Next, navigate to the AngularL04 directory in your terminal.
+
+cd AngularL04
+Now that you are in the AngularL04 directory, run the following:
+
+npm install
+Caution!
+If you are getting this error saveError ENOENT: no such file or directory, open '/Users/username/Desktop/FullStackWeb/FEFAngular/AngularL04/package.json', that means you are not in the correct directory with a package.json file. Please follow steps 4-7 to make sure you are in the correct directory.
+
+
+1. Open your new project in VS Code (or you can open the folder within VS Code directly):
+   ```text
+   code .
+Once that is done, you will be ready to get started!
+
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">Tip!</h3>
+    </div>
+    <div class="panel-body">
+        <p>This lesson will be using the starter project above within the examples, so if you choose to use your portfolio project, you may need to change some of the code shown to match your information.</p>
+    </div>
+</div>
+Previous
+
+
+
+
+Creating Components
+A base component is what holds all new components that are generated. Within your project, open up the src/app folder. The files listed are all part of the base component for this application. The app.module.ts file is where every component used in this application will be imported and eventually rendered onto the webpage. In this section, you will learn how to create and use another component within the base component.
+
+Below are the steps to create a new component named skills. You will be using the Angular CLI tool to generate this new component.
+
+Be sure your AngularL04 project is open in VS Code.
+
+The command below is using the Angular CLI command generate to create a new component with the name of skills. Run the following from your VSCode integrated terminal:
+
+ng generate component skills
+As a best practice, when creating new components, they should have a lowercase name.
+The above components name is skills.
+Tip!
+It is essential to note that once the server is running you will need to use the keyboard shortcut Ctrl + C in the terminal on both Mac & Windows to stop the server. You will need to stop the server anytime you want to install new packages, use the Angular CLI commands, or are finished working on the project.
+
+Additional Info!
+When creating new pieces for an Angular project, you should always make them using the Angular CLI tool. The Angular CLI is the main tool to initialize, develop, scaffold, and maintain Angular applications. While there are many possible commands to use with the Angular CLI, the focus will be on just a few of them, specifically; new, serve, generate, and test. For information on the commands, please refer to the Angular CLI Documentation.
+
+When you ran the above generate command, it created a folder named skills, within the app folder.
+
+This folder includes the following files:
+skills.component.html
+skills.component.css
+skills.component.ts
+skills.component.spec.ts
+The skills.component.ts file is where you will typically start updating since this is the file that holds the logic of the component.
+Next, open the skills.component.ts file located in the skills component folder. You will find the following code.
+
+skills.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-skills',
+  templateUrl: './skills.component.html',
+  styleUrls: ['./skills.component.css']
+})
+export class SkillsComponent implements OnInit {
+  constructor() {}
+
+  ngOnInit() {}
+}
+The first line of the file is the import statement, this statement is importing Component and OnInit which allows for the use of the @Component decorator and the ngOnInit life-cycle method, respectively.
+
+The next line of code is the @Component decorator which specifies the Angular metadata for the component, this includes things like animations, encapsulation, selectors, the templateUrl, and styleUrls. The CLI, by default, generated the following three metadata properties within this @Component decorator:
+
+selector: The component's CSS element selector, this is how Angular identifies the component in the template.
+templateUrl: The location of the component's template file, this is the location of the HTML to be used for the structure of the component.
+styleUrls: The location of the stylesheets used specifically for the private styling of the component.
+Next is the class SkillsComponent which has a few essential parts:
+
+Export: Components are exported so the component can then be imported into different files.
+implements OnInit: This is implementing the imported OnInit into the class.
+ngOnInit: This is an Angular life-cycle method. ngOnInit is the place where the logic for the component will live.
+Now that the Skills component has been added, it needs to be imported into the app.module.ts file. However, when you use the Angular generate command to create a new component, it adds the import statement and necessary declaration into the app.module.ts file automatically. Open the app.module.ts file (located in the src/app folder), and you will see that the Skills component already exists, as shown below:
+
+Photo of a person scratching a cat's head. The title reads Mister Bigglesworth's portfolio page. Under the photo is the line I live in New York. Figure 4-1: Files Created
+
+Next, you need to add some information to the Skills component. Do this by creating an array named skills and adding some of your web development skills. The skills array should be added inside the SkillsComponent class, just above the constructor in the skills.component.ts file, as shown below.
+
+skills.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-skills',
+  templateUrl: './skills.component.html',
+  styleUrls: ['./skills.component.css']
+})
+export class SkillsComponent implements OnInit {
+  skills = ['Abstract Mathematics', 'Philosophy', 'Developing software'];
+
+  constructor() {}
+
+  ngOnInit() {}
+}
+Try It!
+The above code is listing skills specific to Margaret Hamilton. Be sure to change it to match your skills!
+
+Great work! Now that you have a new skills component, click "Next" to learn how to render your skills listed on the page.
+
+Previous
+
+
+
+
+Rendering Components
+One of the most significant benefits of components is the ability to write them once and use them over and over again. The skills component can be accessed by any area of the application to display the skills listed within the skills array. Below are the steps you need to take to render the skills onto the page.
+
+Navigate to the skills.component.html and replace the code in the file with the following.
+
+skills.component.html file:
+
+<div>
+  <h3>Skills: </h3>
+  <p>{{ skills }}</p>
+</div>
+The code above will use handlebars ({{ }}) to render the skills onto the page, just as you have done in the past.
+Next, start the app by running the following command:
+
+ng serve --open
+This will start your server and open the webpage.
+After looking at your opened webpage, you may notice something immediately: the skills HTML is nowhere to be found, and this is because the skills component needs to be added to the app.component.html to be rendered. The code below shows the app.component.html with the <app-skills> component rendered below the p element.
+
+app.component.html file:
+
+<div id="header">
+    <h1>
+        {{ title }}'s Portfolio Page!
+    </h1>
+    <img alt="Angular Logo" src="../assets/images/margaret.jpg">
+    <h3>I was born in {{ city }} in 1936.</h3>
+    <h5>Tagline: {{ tagline }}</h5>
+    <p>{{ aboutMe }}</p>
+    <app-skills></app-skills>
+</div>
+Above, the use of <app-skills> is the syntax for how to render another component within the base component.
+Notice that the component skills, is used in the above code and sort of looks like an HTML element itself. But how does that work? Well, within the skills @Component (skills.component.ts file) is a field named selector, and this is where the app-skills name is defined. This field defines the selector name for when you are rendering the component. In this case, it is app-skills.
+It is important that you understand that when rendering a component within the base component, you can find the name (automatically created with the generate Angular CLI command) within @Component's selector field within the skills.component.ts file.
+Navigate back to the browser. The application will display the new HTML from the skill component now that the <app-skills> element has been added to the HTML inside app.component.html file.
+
+Files created. App module TS screen showing lines of code. There are arrows pointing to the phrase skills component among the other lines of code. Figure 4-2: Skills Rendered
+
+Now that you have the skills rendered onto the page, notice that there are no spaces between the skills listed, as there should be. To fix this, you need to add an Angular ngFor directive which will loop over each item in the array and produce a new <li> element for each item in the array. Add the following code to the skills.component.html file.
+
+skills.component.html file:
+
+<div>
+    <h3>
+    Skills:
+    </h3>
+    <ul>
+    <li *ngFor="let skill of skills">{{skill}}</li>
+    </ul>
+</div>
+In the code above, *ngFor can pull in each skill from the array:
+The let skill of skills is grabbing each skill within the skills array and setting it to the variable of skill. Then, within the handlebars, you render each skill rather than all of the skills at once.
+"Angular Directives are markers on a DOM element (such as an attribute, element name, comment or CSS class) that tell AngularJS's HTML compiler to attach a specified behavior to that DOM element or even to transform the DOM element and its children." - AngularJS
+
+In this example, you are using the *ngFor Angular Directive. As you progress through this course, you will be seeing more Angular Directives and learning how they work.
+After adding and saving the code above in the skills.component.html file, return to the webpage.
+
+Notice that the results on the page are rendering the bullet points that come from the <ul>.
+To make this look cleaner, open the skills.component.css file and target the <ul> element and give it the following styling.
+
+skills.component.css file:
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+Now when you view the browser, you won't see the bullet points.
+Lastly, what if you wanted to target the entire skills component from the app.component.css file? Well, you can do so just as if you were targeting a normal HTML element, as shown below.
+
+app.component.css file:
+
+p {
+    padding-right: 5em;
+    padding-left: 5em;
+}
+/* Add the following: */
+app-skills {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', 'sans-serif';
+}
+The code above is targeting the entire app-skills component and giving it a new font.
+Now that you have used the app-skills component and added some new CSS, you have a page that looks like the following:
+
+Screen shot showing a webpage titled Margaret Hamilton's portfolio page. There is a picture of a woman on it. Under the picture is the text I was born in Paoli Indiana in 19 36. At the bottom of the page there is text that reads skills abstract mathematics, philosophy, developing software.Figure 4-3: Styled Skills
+
+Tip!
+Remember, if you are using your own portfolio project from Lesson 3, your project will not look the same as above. But, if you are using the starter project provided to you, and have used the same code shown so far, you should have a page that looks like the above picture.
+
+So far, you have learned how to render a component within the base component and how to use an Angular Directive to loop through an array. Great job!
+
+
+
+Next
+Previous
+
+** the most basic bldg block for dev the user interface of Angular is: Component 
+** Components are denotoed: by prefixing a class with @Component()
+** sourceUrls is *NOT* a default metadata property of a component ((selector, templatUrl, and styleUrls are))
+** the Angular life-cycle method is: ngOnInit
+** the cmd for the CLI to create a new component names about is: ng generate component about
+** when using the CLI tool to generate a component the following are generated automatically: an HTML, a CSS, and a TS.
+** when generating a new component using the CLI, it is automatically imported in the app.module.ts file.
+** generating a new component 'About' using the CLI, the selector is app-about. to add it to an HTMOL template file would be: <app-about></app-about>
+** the Angular directive to loop over an array is: ngFor
+
+Modeling Objects with Classes
+At the moment, skills is nothing more than an array of strings. While this is a valuable way to see how Angular can show the values onto the page, it is more than likely that in a real application; you will need to define the data you want on the page in a more sophisticated way. During this section, you will describe a class that will be used to define, or model, what it means to be a skill. This way, you will be able to define an id and any other information needed for each skill. Once again, Angular CLI will be the fastest way to accomplish this. Follow the steps below.
+
+When using a class to define information, each class will live in a new folder named models. This folder is used to model the data in your application. Using the built-in terminal, enter the following command to create a new folder named models with a single file inside named skill.ts. The skill.ts file will contain a single class that is exported named Skill:
+
+ng generate class models/skill
+Tip!
+If your terminal is currently running, you will need to stop it by pressing the Ctrl + C keys at the same time to enter new commands.
+
+Now, open the src/app/models/skill.ts file. You will find an empty, exported class named Skill.
+
+skill.ts file:
+
+export class Skill {
+}
+Inside the class, created by the CLI, you can add the properties that will make up a skill. For this example, each skill needs to have an id, name, and level. Add the following code into the models/skill.ts file.
+
+skill.ts file:
+
+export class Skill {
+  id: number;
+  name: string;
+  level: string;
+}
+Notice, in the code snippet above that level is of type string, and this means that any valid string will be a valid level. This idea is risky because of the freedom of input. For example, Advanced would be a perfectly acceptable value, while pumpkin would not make any sense as a value. To define a constrained set of value that can be checked, an enum can be used.
+
+An enum is a data type that allows you to define a set of named constraints; it can also be referred to as an enumerated type or enumeration. To do this, use the CLI to generate an enum named level inside a new folder called types:
+
+ng generate enum types/level
+Navigate to src/app/types/level.enum.ts. This file name has a similar naming convention to how the component files are named. This time, instead of .component., you have .enum.. This naming allows Angular to know what to do with this file. Next, look inside the file and notice the syntax is just like a class, except that it has been replaced with the term enum. The reason for this is because, enum as a datatype does not exist in JavaScript; this is a TypeScript specific feature. The values you will want for the Level enum, are listed in the code snippet below.
+
+level.enum.ts file:
+
+export enum Level {
+  Beginner = 'Beginner',
+  Intermediate = 'Intermediate',
+  Advanced = 'Advanced',
+  Expert = 'Expert'
+}
+Additional Info!
+If you would like to read more about Enums, please visit: TypeScript Enums.
+
+Next, return to the models/skill.ts file. Instead of defining level as a string, update the level field to reflect that the data type should now be the Level enum created above. To do this, you will need to import Level at the top of the file, as shown below.
+
+skill.ts file:
+
+import { Level } from '../types/level.enum';
+
+export class Skill {
+  id: number;
+  name: string;
+  level: Level;
+}
+Return to the skills.component.ts file and import the Skill class and Level enum. Refactor the previous skills array to be of type Skill. It will include an array of objects that contains the information of each skill.
+
+skills.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+import { Skill } from '../models/skill';
+import { Level } from '../types/level.enum';
+
+@Component({
+  selector: 'app-skills',
+  templateUrl: './skills.component.html',
+  styleUrls: ['./skills.component.css']
+})
+export class SkillsComponent implements OnInit {
+  skills: Skill[] = [
+    {
+      id: 0,
+      name: 'Abstract Mathematics',
+      level: Level.Expert
+    },
+    {
+      id: 1,
+      name: 'Philosophy',
+      level: Level.Advanced
+    },
+    {
+      id: 2,
+      name: 'Developing Software',
+      level: Level.Expert
+    }
+  ];
+
+  constructor() {}
+
+  ngOnInit() {}
+}
+Now that the skills array has been updated to meet the Skill class, start the server with ng serve. Returning to the webpage, and you will now see the following:
+
+Screen shot showing a webpage titled Margaret Hamilton's portfolio page. There is a picture of a woman on it. Under the photo is the text I was born in Paolo Indiana in 19 36.  At the bottom of the screen is a highlighted and has an arrow pointing to it. Inside the box are 3 lines that read object Object.Figure 4-4: Rendering Objects
+
+The reason the words "[object Object]" are being rendered to the screen is that in the skills.component.html file, the *ngFor directive is looping through each skill in the skills array. Since you have now changed each array item to be an object, the directive is rendering each object, rather than rendering the name of the skill, which is what is wanted on the page.
+
+To fix this issue is straightforward: update your file to look like the code example below.
+
+skills.component.html file:
+
+<h3>
+Skills:
+</h3>
+<ul>
+<li *ngFor="let skill of skills">{{skill.name}}</li>
+</ul>
+Above, you are now rendering skill.name property rather than the entire skill object.
+Below is code that is using the id and level properties too.
+skills.component.html file:
+
+<h3>
+Skills:
+</h3>
+<ul>
+<li *ngFor="let skill of skills">
+    <p>{{skill.id + 1}}. {{skill.name}}: {{skill.level}}</p>
+</li>
+</ul>
+Screen shot showing a webpage titled Margaret Hamilton's portfolio page. There is a picture of a woman on it. Under the photo is the text I was born in Paolo Indiana in 19 36. At the bottom of the page is a highlighted box that reads skills abstract mathematics expert, philosophy advanced, developing software expert. Figure 4-5: Skills Objects Bound
+
+Great work! You have now learned how to model your data with different fields and then how to render those fields on the page by binding them to the HTML.
+
+Services
+Services are used to provide common functionality to various components throughout your application. Signified by the decorator @Injectable, Services are the primary source of information and data for a component. They are used to control the flow of data to and from components.
+
+Components should not fetch or save data directly, and they certainly should not knowingly present fake data. Components should only focus on displaying the data they are passed and delegating data access to a service. Currently, the portfolio project used in this lesson is doing precisely that. It is now time to update this application by adding a service and moving any logic relating to sending, receiving, or creating data into that service.
+
+Box labeled component with 3 smaller boxes inside of it. The first is labeled HTML markup, the second is labeled render logic, and the third is labeled sample data. Inside the sample data box are a variety of symbols, including apostrophes, commas, brackets, quotation marks, as well as the text ID zero and name and level. There is an arrow going from the large box to another titled service. Inside this box is another smaller one that has the text fetch and send data. Over the arrow connecting the two large boxes it reads move logic that creates sample data to a service.Figure 4-6: Component To Service
+
+The main advantage of creating a service is that the component code will no longer need to be updated because of the way the data will be sent and received is separate from the component itself. As long as the service continues to supply the component with the correct data structure, the component doesn't need to know anything about how the data was delivered.
+
+Create and Use a Service
+Follow the below steps to create and use a service within your application.
+
+Tip!
+If your terminal is currently running, you will need to stop it by pressing the Ctrl + C keys at the same time to enter new commands.
+
+Services can be created by using the Angular CLI. Run the following command in the built-in terminal of VS Code, and this will create a new service named skills.service.ts inside a new folder called services.
+
+ng generate service services/skills
+Notice that after running the above command, a folder named services was created and it includes two files: skills.service.ts and skills.service.spec.ts.
+The skills.service.spec.ts file is used for unit testing your code later on.
+The skills.service is something that is available to all components to be able to get a list of skills. To use the skills.service within the skills.component, you will need to use something called dependency injection, and this allows you to inject the service into the component by way of the component's constructor. However, before you do that, the skills.service needs to be accessible within the application. To do this, import the SkillsService into the app.module.ts file and add it within the AppModule's providers array, as shown below.
+
+app.module.ts file:
+
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+import { SkillsComponent } from './skills/skills.component';
+
+// add the following import statement:
+import { SkillsService } from './services/skills.service';
+
+@NgModule({
+  declarations: [AppComponent, SkillsComponent],
+  imports: [BrowserModule],
+  // add SkillsService to the providers array:
+  providers: [SkillsService],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+Next, you need to update your skills.service.ts file to include the array of skills objects as well as the necessary import statements. Consider the following code.
+
+skills.service.ts file:
+
+import { Injectable } from '@angular/core';
+
+import { Skill } from '../models/skill';
+import { Level } from '../types/level.enum';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class SkillsService {
+    skills: Skill[] = [
+        {
+            id: 0,
+            name: 'Abstract Mathematics',
+            level: Level.Expert
+        },
+        {
+            id: 1,
+            name: 'Philosophy',
+            level: Level.Advanced
+        },
+        {
+            id: 2,
+            name: 'Developing Software',
+            level: Level.Expert
+        }
+    ];
+
+    constructor() {}
+}
+First, you need to import Skill from the models folder
+Next, import Level from the types folder
+Lastly, remove the array from the skills.component.ts file and add it into the SkillsService class, as shown above.
+Now that you have your array of skills objects within the service, it is accessible to the rest of the application. You now need to import the SkillsService into the skills.component.ts file. Then, you can list the array of skills with type Skill[] without listing the actual data. Your code should look like the following code.
+
+skills.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+import { Skill } from '../models/skill';
+
+import { SkillsService } from '../services/skills.service';
+
+@Component({
+  selector: 'app-skills',
+  templateUrl: './skills.component.html',
+  styleUrls: ['./skills.component.css']
+})
+export class SkillsComponent implements OnInit {
+  skills: Skill[];
+
+  constructor() {}
+
+  ngOnInit() {}
+}
+Notice that Level is no longer imported. Since you are using Level within the service, you don't need it within the component.
+Now that you have successfully imported SkillsService, you need to add that service to the constructor of the SkillsComponent class, this is where you will be using dependency injection.
+
+skills.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+import { Skill } from '../models/skill';
+
+import { SkillsService } from '../services/skills.service';
+
+@Component({
+  selector: 'app-skills',
+  templateUrl: './skills.component.html',
+  styleUrls: ['./skills.component.css']
+})
+export class SkillsComponent implements OnInit {
+  skills: Skill[];
+
+  constructor(private skillsService: SkillsService) {
+    this.skills = skillsService.skills;
+  }
+
+  ngOnInit() {}
+}
+Within the SkillsComponents constructor, you are passing the SkillsService object as an argument.
+Within the constructor, the component's skills property is set to the skills property of the SkillsService object passed into the constructor.
+This is done with the line this.skills = skillsService.skills;
+The skills array within this class is set to the skills array within the skillsService
+The result is that any time a new instance of the SkillsComponent class is created, it will set the value of its skills property to that of the service.
+Run and test the app by entering ng serve in the terminal and verify the data is still making it to your page. Your browser should look like the following:
+
+Best Practice. Screen shot showing a webpage titled Margaret Hamilton's portfolio page. There is a picture of a woman on it. Under the photo is the text I was born in Paolo Indiana in 19 36. At the bottom of the page is a highlighted box that reads skills abstract mathematics expert, philosophy advanced, developing software expert. Figure 4-7: Best Practice
+
+Notice that your browser now looks exactly how it did before you added the service. What you have updated has changed how the code works, but not how the webpage looks.
+Review
+
+Next
+Previous
+
+
+
+Using ngOnInit
+You may have noticed throughout the last two lessons that the component class has an ngOnInit method that has been empty and unused this entire time. A constructor is called when the class is initialized and ensures that all the class properties are instantiated correctly. ngOnInit, on the other hand, is a life-cycle method that is part of Angular and is executed after the constructor is run. Due to this, it is considered a best practice to not do any work within the constructor and only pass parameters to be used for Dependency Injection. You then need to add the functionality needed within the ngOnInit life-cycle method, located after the constructor. Follow the below steps to update your code. You will find the updated skills.component.ts file after the steps.
+
+To update the code to follow this best practice, create a new property named dataService of type SkillService within the class.
+
+Set dataService to the skillsService parameter that lives within the implementation of the constructor.
+
+This will allow the component to access the service as needed.
+Next, remove the following line from the constructor:
+
+this.skills = skillsService.skills;
+The constructor should only have a single line of code now that sets the dataService property to the service.
+Then, in the ngOnInit method, set the skills property to the value of the skills property of the service using the new property dataService that you just added:
+
+ngOnInit() {
+    this.skills = this.dataService.skills;
+}
+Your code should look like the following.
+
+skills.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+import { Skill } from '../models/skill';
+
+import { SkillsService } from '../services/skills.service';
+
+@Component({
+    selector: 'app-skills',
+    templateUrl: './skills.component.html',
+    styleUrls: ['./skills.component.css']
+})
+export class SkillsComponent implements OnInit {
+    skills: Skill[];
+    dataService: SkillsService;
+
+    constructor(private skillsService: SkillsService) {
+        this.dataService = skillsService;
+    }
+
+    ngOnInit() {
+        this.skills = this.dataService.skills;
+    }
+}
+Return to your webpage, and it should look the same. You are now just using a best practice by utilizing the ngOnInit() lifecycle method. Nice work!
+
+>> a CONSTRUCTOR is the method of a class used to initialize the class's prop.
+>> ngOnInit : the angular life-cycle method of a class
+>> the ngOnInit, life-cycle method, is exe AFTER the class constructor is exe.
+>> Dependency Injection is implemented using the constructor.
+
+Next
+Previous
+
+
+
