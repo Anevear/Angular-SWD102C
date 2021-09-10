@@ -138,9 +138,6 @@ Great work! Now that you have a new skills component, click "Next" to learn how 
 
 Previous
 
-
-
-
 Rendering Components
 One of the most significant benefits of components is the ability to write them once and use them over and over again. The skills component can be accessed by any area of the application to display the skills listed within the skills array. Below are the steps you need to take to render the skills onto the page.
 
@@ -228,11 +225,7 @@ Tip!
 Remember, if you are using your own portfolio project from Lesson 3, your project will not look the same as above. But, if you are using the starter project provided to you, and have used the same code shown so far, you should have a page that looks like the above picture.
 
 So far, you have learned how to render a component within the base component and how to use an Angular Directive to loop through an array. Great job!
-
-
-
 Next
-Previous
 
 ** the most basic bldg block for dev the user interface of Angular is: Component 
 ** Components are denotoed: by prefixing a class with @Component()

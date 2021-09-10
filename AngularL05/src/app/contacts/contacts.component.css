@@ -1,0 +1,11 @@
+ul{
+         display: flex;
+         list-style-type: none;
+         padding: 0;
+}
+li{
+         border: 5px solid black;
+         height: 14em;
+         width: 25em;
+         background-color: rgb(37, 36, 36);
+}

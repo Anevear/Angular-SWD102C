@@ -12,7 +12,6 @@ export class SkillsComponent implements OnInit {
   skills:Skill[];
   dataService:SkillsService;
     
-
   constructor(private skillsService:SkillsService) {
     this.dataService=skillsService;
    }
