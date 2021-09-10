@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Skill } from '../models/skill';
 import { Level } from '../types/level.enum';
 
+import { Observable, observable, of } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -25,4 +26,8 @@ export class SkillsService {
   ]
 
   constructor() { }
+
+  getSkills=(): Observable<Skill[]> =>{
+    return of(this.skills);
+  }
 }
