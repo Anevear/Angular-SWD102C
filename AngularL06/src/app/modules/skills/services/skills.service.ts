@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-    import { Skill } from '../models/skill';
-    import { Level } from '../types/level.enum';
+    import { Skill } from 'src/app/shared/models/skill';
+    import { Level } from 'src/app/shared/types/level.enum';
     import { Observable, of } from 'rxjs';
 
     @Injectable({
