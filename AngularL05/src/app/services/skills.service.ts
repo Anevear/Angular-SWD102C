@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Skill } from '../models/skill';
 import { Level } from '../types/level.enum';
 
-import { Observable, observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })

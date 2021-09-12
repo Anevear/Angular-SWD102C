@@ -1,0 +1,490 @@
+Setup
+As explained previously, you have the option to continue to use your portfolio project created in Lesson 3, or you can download the starter project provided below. It is suggested that you use the starter project, but if you feel your project is working correctly, feel free to continue to use your project.
+
+Start off by downloading the starter project and unzipping it. The starter project will be in a folder named angular-L5-starter.
+
+Starter Project
+
+Next, move the starter project folder to the FEFAngular folder and rename it from angular-L5-starter to AngularL05.
+
+Open up your command prompt/terminal.
+
+Run the following to navigate to your Desktop
+
+cd Desktop
+Navigate to the FullStackWeb directory in your terminal.
+
+cd FullStackWeb
+Then, navigate to the FEFAngular directory in your terminal.
+
+cd FEFAngular
+Next, navigate to the AngularL05 directory in your terminal.
+
+cd AngularL05
+Now that you are in the AngularL05 directory, run the following:
+
+npm install
+Caution!
+If you are getting this error saveError ENOENT: no such file or directory, open '/Users/username/Desktop/FullStackWeb/XXXXXX/XXXXXXX/package.json, that means you are not in the correct directory with a package.json file. Please follow steps 4-7 to make sure you are in the correct directory.
+
+Open your new project in VS Code (or you can open the folder within VS Code directly):
+
+code .
+Once that is done, you will be ready to get started!
+
+Tip!
+This lesson will be using the starter project above within the examples. If you choose to use your portfolio project, you may need to change some of the code shown to match your information.
+
+Previous
+Next
+
+
+
+Components, Services, Observables
+While the approach in the previous lesson works fine for development, it is not representative of a typical, real-world application. Aside from the fact that the service uses mock data, it also provides the data immediately when requested. Usually, a service will pull data from another source, like a database, which requires time to complete. If that time is lengthy, but the requestor expects the results immediately, it could end up causing the application to lock up while it awaits the results.
+
+To address such a situation, the service should provide the data via a method that performs an asynchronous operation to acquire the data and return it immediately. However, the caller would still need to be informed of when the data acquisition operation completes, so that it can do what it needs to with the data. This can be accomplished by passing a callback to the service's method or returning a promise or observable from the service's method.
+
+Don't worry if this seems intimidating. The steps below will walk you through how to implement an observable to handle the process of providing a collection of information over a period of time rather than all at once. To implement an observable, you will be using the RxJS library. For the examples below, you will be working with the skills component and service within your application.
+
+Additional Info!
+If you would like to read more about the RxJS library, please visit: https://rxjs-dev.firebaseapp.com/.
+
+NOTE: The Starter Project already has RxJS as a dependency and should already be installed.
+
+Make sure your AngularL05 folder is open in VS Code.
+
+Open the built-in terminal in VS Code. Within VS Code, press the following keys to open the terminal:
+
+ctl `
+Press the control and backtick keys at the same time.
+Next, you need to import the observable you will be using from RxJS into the skills service. Since the service provides the information or data to the component, this is why you must import the observable into this file. Add the below import statement into the services/skills.service.ts file.
+
+skills.service.ts file:
+
+import { Injectable } from '@angular/core';
+
+import { Skill } from '../models/skill';
+import { Level } from '../types/level.enum';
+
+// add the below import statement:
+import { Observable, of } from 'rxjs';
+
+@Injectable({
+    providedIn: 'root'
+})
+
+export class SkillsService {
+
+//...
+The new import statement is importing Observable and of which are parts of RxJS.
+During the following steps, you will learn why and how these are used within the application.
+You now need to create a new method that will live within the SkillsService class, and this will use the RxJS observable and of() method. Consider the code below.
+
+skills.service.ts file:
+
+import { Injectable } from '@angular/core';
+
+import { Skill } from '../models/skill';
+import { Level } from '../types/level.enum';
+import { Observable, of } from 'rxjs';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class SkillsService {
+    skills: Skill[] = [
+        {
+            id: 0,
+            name: 'Abstract Mathematics',
+            level: Level.Expert
+        },
+        {
+            id: 1,
+            name: 'Philosophy',
+            level: Level.Advanced
+        },
+        {
+            id: 2,
+            name: 'Developing Software',
+            level: Level.Expert
+        }
+    ];
+
+    getSkills = (): Observable<Skill[]> => {
+        return of(this.skills);
+    };
+}
+Above, a new method named getSkills() was created below the skills array. This method includes the following:
+The method returns an observable with type Skill, this is shown by Observable<Skill[]>.
+The method still returns the type Skill, but it now will be an observable.
+The getSkills() method then returns another method named of().
+The of() method, "creates an Observable that emits some values you specify as arguments, immediately one after the other, and then emits a complete notification." - RxJS.
+This method is the observable itself, which will produce the values given one after the other rather than all at once. Once it has completed producing the values, it will give a complete notification.
+The observable is returning the skills array that exists within the SkillsService class.
+Now that the SkillsService class includes the necessary methods, the SkillsComponent needs to be updated to include the getSkills() method. Since the ngOnInit method is what receives the data from the service, this is where you will need to add the getSkills() method. You will also need to use the subscribe() method, as shown below.
+
+skills.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+import { Skill } from '../models/skill';
+
+import { SkillsService } from '../services/skills.service';
+
+@Component({
+    selector: 'app-skills',
+    templateUrl: './skills.component.html',
+    styleUrls: ['./skills.component.css']
+})
+
+export class SkillsComponent implements OnInit {
+    skills: Skill[];
+    dataService: SkillsService;
+
+    constructor(private skillsService: SkillsService) {
+        this.dataService = this.skillsService;
+    }
+
+    ngOnInit(): void {
+        this.dataService.getSkills().subscribe(skills => this.skills = skills);
+    }
+}
+The above component is still returning the dataService property, but the getSkills() method is now being used.
+The .subscribe() method is how the component subscribes to the skills array.
+When this component subscribes, it passes in a callback that updates its local skills property with the results.
+This callback can be called anytime the data changes, this will allow the component to update itself with the new data continually.
+Now, run your project with ng serve. Your page should now look exactly the same. What has changed is how the data is being sent.
+
+Within this app, your service is using static, mock data (the skills array). Because of this, the callback will only be triggered one time. In most applications, databases are used that can potentially be continually updated. Even though your app will only trigger the callback once, it is now structured where if you did have a database, your service could pull in the changing data and the callback would repeatedly be called with each change.
+
+Review
+Below is a quiz to review the recently covered material. Quizzes are not graded.
+
+Observables Quiz
+Your Score
+100%
+6/6 Questions Correct
+
+ReviewRetake
+Previous
+Next
+
+
+
+Two-Way Data Binding
+Data binding in Angular is the automatic synchronization between what value is displayed in the browser and the value stored in the corresponding property. So far, you have accomplished this using double brackets {{ }} within the HTML portion of the component templating engine. Angular takes this a step further and allows for two-way data binding. Changes that are made in the view are immediately reflected in the underlying model and vice versa.
+
+Follow the below steps to integrate two-way data binding into your AngularL05 project. You will be creating a new component that will allow the user to input their name and it will then greet the user.
+
+Tip!
+It is recommended to collapse all folders and close all files within VSCode relating to the skills component, this will help keep your open project organized.
+
+To begin, create a new component named greeting by running the following command in your integrated terminal:
+
+ng generate component greeting
+Tip!
+If your terminal is currently running, you will need to stop it by pressing the Ctrl + C keys at the same time to enter new commands.
+
+Next, write an appropriate greeting message within the src/app/greeting/greeting.component.html file. The HTML will utilize handlebars to show the user's name on the page. Add the following.
+
+greeting.component.html file:
+
+<h4>Welcome {{visitor}}!</h4>
+<div>
+  <input placeholder="name" />
+</div>
+Since you are working with a new component, you need to add the greeting component into the base component, just as you did with the skills component. Add the following <app-greeting> component into the app.component.html file.
+
+app.component.html file:
+
+<div id="header">
+    <h1>
+        {{ title }}'s Portfolio Page!
+    </h1>
+    <img alt="Angular Logo" src="../assets/images/margaret.jpg">
+    <h3>I was born in {{ city }} in 1936.</h3>
+    <h5>Tagline: {{ tagline }}</h5>
+    <p>{{ aboutMe }}</p>
+    <app-greeting></app-greeting>
+    <app-skills></app-skills>
+
+</div>
+Start your server by running ng serve --open. Your browser should now look similar to the screenshot below:
+
+Greeting component. Screen shot showing a webpage titled Margaret Hamilton's portfolio page. There is a picture of a woman on it. Under the photo is the text I was born in Paolo Indiana in 19 36. At the bottom of the page it says Welcome and there is a text box where text can be entered. At the very bottom of the page it says skills 1. angular advanced. 2. eating cat food expert. 3. sitting on laps intermediate. Figure 5-1: Greeting Component
+
+Return to the webpage and try entering your name into the input field. As you can see, it currently does nothing. The reason for this is that the input itself needs to be bound to a property named visitor within the component. Because the user is providing their name, using two-way data binding will handle the data that is being sent from the user rather than to the user. To do this, Angular provides developers with the ngModel directive. Add the ngModel directive to the input element as shown below.
+
+greeting.component.html file:
+
+<h4>Welcome {{visitor}}!</h4>
+<div>
+  <input [(ngModel)]="visitor" placeholder="name" />
+</div>
+Fun Fact!
+The [()] syntax wrapping ngModel is the syntax used to indicate two-way binding and is known as "Banana-box" because, well... it looks like a banana in a box.
+
+Make sure your application is running and navigate to the browser. As you can see, the application is broken and is only showing the background color. Open the console, and you will see an error message generated by the Angular compiler, as shown below:
+
+Parse error screen. It is mostly blank with several lines of code underneath a blank field.Figure 5-2: Parse Error
+
+This error is showing because ngModel is a part of the FormModule package in Angular. Since you have not included this package in your application, you do not currently have access to its features.
+Next, you need to include the FormsModule package. Open the app.module.ts file and import the FormsModule. Then, add the FormsModule to the imports array within the @NgModule. Your app.module.ts file should now look like the following.
+
+app.module.ts file:
+
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+//import the FormsModule:
+import { FormsModule } from '@angular/forms';
+
+import { AppComponent } from './app.component';
+import { SkillsComponent } from './skills/skills.component';
+
+import { SkillsService } from './services/skills.service';
+import { GreetingComponent } from './greeting/greeting.component';
+
+@NgModule({
+    declarations: [AppComponent, SkillsComponent, GreetingComponent],
+    //include the FormsModule within the imports array:
+    imports: [BrowserModule, FormsModule],
+    providers: [SkillsService],
+    bootstrap: [AppComponent]
+})
+export class AppModule {}
+Lastly, refresh the page, and you should now see that the application has returned to normal. Type in the input field and the view will update as you enter text, this is two-way data binding. With the use of the FormsModule and the ngModel directive, you can bind a view to an input and create a way to update the page instantly.
+
+Nice job! You have learned how to use the ngModel directive to update the page when the input field changes. The next section will dive more into what you can do with inputs and forms. Keep up the great work!
+
+Review
+Below, is a quiz to review the recently covered material. Quizzes are not graded.
+
+Two-Way Data Binding Quiz
+Your Score
+100%
+5/5 Questions Correct
+
+ReviewRetake
+Previous
+Next
+
+
+
+Forms
+User actions such as clicking a link, pushing a button, and entering text are essential to the success of any application. Seamless interaction and a solid product are paramount to the success of any business and Angular comes with tools for making forms quickly and efficiently.
+
+Having a message system within an application is common, it allows users to input their name and email along with a message to contact the owner of the website. To accomplish this, you will build a message form the user can fill out to send you (the creator) a message.
+
+Tip!
+If your terminal is currently running, you will need to stop it by pressing the Ctrl + C keys at the same time to enter new commands.
+
+Create a component for the form named MessageForm by using the Angular CLI command:
+
+ng g c MessageForm
+Notice that the above command isn't the same as what you have run in the past. That is because the above command is using shorthand.
+The Angular CLI shorthand for generate is g and for component is c.
+Inside of the message-form.component.html file, add the HTML structure of your form. The form should have a place for name, email, subject, message, and a button to submit the form. Below is how your code should look.
+
+message-form.component.html file:
+
+<form (ngSubmit)="onSubmit()">
+    <div>
+        <label for="name">Name: </label>
+        <input type="text" placeholder="name" name="name" required [(ngModel)]="model.name">
+    </div>
+    <div>
+        <label for="email">Email: </label>
+        <input type="email" placeholder="email" name="email" email required [(ngModel)]="model.email">
+    </div>
+    <div>
+        <label for="subject">Subject: </label>
+        <input type="text" placeholder="subject" name="subject" required [(ngModel)]="model.subject">
+    </div>
+    <div>
+        <label for="message">Message: </label>
+        <textarea type="text" placeholder="message" name="message" required [(ngModel)]="model.message"></textarea>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+Notice that you are using the (ngSubmit) and [(ngModel)] directives within this form.
+The (ngSubmit)="onSubmit() is an Angular directive stating that on submit of the form, it will call the onSubmit() function (to be created shortly).
+The [(ngModel)] is allowing each input field to use that directive to update the data to whatever the user writes within the input.
+Render the message-form component within app.component.html to display the form, as shown below.
+
+app.component.html file:
+
+<div id="header">
+    <h1>
+        {{ title }}'s Portfolio Page!
+    </h1>
+    <img alt="Angular Logo" src="../assets/images/margaret.jpg">
+    <h3>I was born in {{ city }} in 1936.</h3>
+    <h5>Tagline: {{ tagline }}</h5>
+    <p>{{ aboutMe }}</p>
+    <app-greeting></app-greeting>
+    <app-skills></app-skills>
+</div>
+<app-message-form></app-message-form>
+Next, run ng serve within your terminal and navigate to the browser to make sure the form is updating correctly:
+
+Form screen. The empty field at the top of the screen has been filled in with the webpage with the photo of the woman on it. Under the webpage, several lines of code appear.Figure 5-3: Form
+
+As you can see from the image above, the form exists, but you are getting an error, and this is because you haven't created the model yet to contain the fields from the form.
+Create a class that will serve as a model for the data and will add the necessary properties (name, email, subject, and message) to the class via a constructor. You can use the Angular CLI once again to create a new class that will serve as the model. Remember to include the models folder in the command to ensure the file is created in the correct directory.
+
+ng g class models/message
+Tip!
+Remember to stop your server before attempting to run the CLI command with Ctrl + C. To start your server and have it open in a browser use ng serve --open.
+
+Next, add the following properties and values into the Message class within the models/message.ts file.
+
+message.ts file:
+
+export class Message {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+}
+Now that the class modeling your message has been created, import the Message into message-form.component.ts file. Your file should now look like the following.
+
+message-form.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+// add the following import statement:
+import { Message } from '../models/message';
+
+@Component({
+    selector: 'app-message-form',
+    templateUrl: './message-form.component.html',
+    styleUrls: ['./message-form.component.css']
+})
+export class MessageFormComponent implements OnInit {
+
+    constructor() { }
+
+    ngOnInit() {
+    }
+
+}
+
+To submit the form, the best approach is to use the ngSubmit directive provided by Angular, this will allow you to provide the user with feedback after the submission. The directive was already added to the form tag with a function of onSubmit, as seen below.
+
+message-form.component.html file:
+
+  <form (ngSubmit)="onSubmit()">
+    // ...
+  </form>
+Finally, you need to create the onSubmit() function within the MessageFormComponent which will handle the form, as shown below.
+
+message-form.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+import { Message } from '../models/message';
+
+@Component({
+    selector: 'app-message-form',
+    templateUrl: './message-form.component.html',
+    styleUrls: ['./message-form.component.css']
+})
+export class MessageFormComponent implements OnInit {
+    model: Message = new Message();
+    constructor() { }
+
+    ngOnInit() {
+    }
+
+    onSubmit() {
+        console.log('Submit Successful: ', this.model);
+    }
+}
+
+The model property is of type Message and is set to a new, empty message, this is where the form data will be stored. You set an empty value at first, so the form will load with empty values.
+
+The onSubmit method is the method that will be called when the form is submitted. It will log the value of the model property to the console.
+
+Now when the form is submitted, the message will be displayed in the console along with the data that would be sent if you connected this application to a server:
+
+Submitted form. A webpage with a photo of a woman on it and a line of code that starts with the text submit successful.Figure 5-4: Submitted Form
+
+Review
+Below is a quiz to review the recently covered material. Quizzes are not graded.
+
+Forms Quiz
+Your Score
+100%
+4/4 Questions Correct
+
+ReviewRetake
+Previous
+Next
+
+
+
+Interacting with Forms
+When working with data collection inside an application, it is vital to provide the user with feedback when they interact with the form. Not only does it provide them with a better experience and coax them into using the application more, but it also helps ensure that the correct information is collected. Often, user input can be checked to see if it meets specific requirements that you are looking for (e.g., phone numbers, email, usernames, etc.), this can be done through messages, regular expressions, haptic feedback, or other forms of visual feedback. In this example, you will apply CSS to built-in Angular classes to alert users when the form validation doesn't match.
+
+Color feedback is one of the most recognizable sources of feedback for a user; green (or any other color) means good, while red means bad. To do this, you first need to establish your CSS.
+
+message-form.component.css
+
+form input {
+    outline-width: 0;
+    border-style: none;
+}
+
+form textarea {
+    outline-width: 0;
+    border-style: none;
+}
+
+form div {
+    margin-bottom: 5px;
+    text-align: center;
+}
+h3 {
+    text-align: center;
+}
+The CSS above cleans up the form and places the text centered on the page. It also removes the faint blue highlighting from the elements when you click on them.
+Now, you can use the Angular classes applied to your form to add or remove CSS properties. To see the classes that are applied, use the console in your browser and look at the elements before and after being clicked. It will update each time the DOM changes. When you click on an input element and then click to leave the element without typing anything, Angular applies new CSS classes which are in response to the HTML attributes on each input field. Use this feature to apply CSS properties when appropriate. Below is one way of applying coloring styles.
+
+message-form.component.css file:
+
+form input {
+    outline-width: 0;
+    border-style: none;
+}
+
+form textarea {
+    outline-width: 0;
+    border-style: none;
+}
+
+form div {
+    margin-bottom: 5px;
+    text-align: center;
+}
+h3 {
+    text-align: center;
+}
+
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    border-bottom: 2px solid red;
+}
+
+input.ng-valid.ng-touched,
+textarea.ng-valid.ng-touched {
+    border-bottom: 2px solid green;
+}
+Now, when entering information, the page will update with green or red underlines for correct or incorrect text entry.
+For example, if you add cat to the email field, it will be red because it is looking for an email such as lupinwolf@gmail.com.
+
+Great work!
+Previous
+Next
