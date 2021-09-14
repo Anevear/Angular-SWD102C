@@ -1,0 +1,478 @@
+Into L09
+>>>>>> Review <<<<<<
+Components are the bldg blocks of Ang apps. A component has a veiw (def w/ html & css) and is associated controller that implements the functionality the view reqs. Ultimately a controller in Ang has 3 roles:
+	1> Managing the model(app data) used by the view
+	2> Implementing the methods() that the view reqs (submitting data and controlling the appearance of the UI
+	3> Managing the data related to the state of the view
+An Ang app is comprised of a hierarchy of comonents. It bgns w/ a base component that contains all of the components used in the app as children/descendants Ea comonent is mnt to b self contained, encapsulating the view and functionality spec to that component. Other code shld not b reaching in2 read and chg its props and it shld not impact otehr components directly. However they do need an ability to exchange data.
+
+
+Passing Data from Parent Component to Child Component
+A component can receive data from its parent component, as long as it has specified that it's able to. When a child component requires data, this data is considered an input. There is an @Input() decorator that can be applied to the property of a component to indicate that it is meant to be used as input from its parent.
+
+To demonstrate how data is passed from a parent component to its child component, you will be working with a starter-project provided. Specifically, you will be creating a new component that represents a specific movie to be displayed.
+
+Setup
+Start off by downloading the starter project and unzipping it. The starter project will be in a folder named angular-L9-starter.
+
+Starter Project
+
+Next, move the starter project folder to the FEFAngular folder and rename it from angular-L9-starter to AngularL09.
+
+Open up your command prompt/terminal.
+
+Run the following to navigate to your Desktop
+
+cd Desktop
+Navigate to the FullStackWeb directory in your terminal.
+
+cd FullStackWeb
+Then, navigate to the FEFAngular directory in your terminal.
+
+cd FEFAngular
+Next, navigate to the AngularL09 directory in your terminal.
+
+cd AngularL09
+Now that you are in the AngularL09 directory, run the following:
+
+npm install
+Caution!
+If you are getting this error saveError ENOENT: no such file or directory, open '/Users/username/Desktop/React-Course/test/package.json, that means you are not in the correct directory with a package.json file. Please follow steps 4-7 to make sure you are in the correct directory.
+
+Open your new project in VS Code (or you can open the folder within VS Code directly):
+
+code .
+Once that is done, you will be ready to get started!
+
+Create DisplayMovieComponent
+In the last lesson, you created a component named DisplayMoviesComponent to display the list of movies from the JSON server. This component contains an array of Movie objects (from the model) and displays each movie's ID, title, and directory via the component's display-movies.component.html file, as shown below.
+
+display-movies.component.html file:
+
+<div class="movies">
+  <h2>
+    Movies:
+  </h2>
+  <ul>
+    <li *ngFor="let movie of movies">
+      <p>{{movie.id + 1}}. {{movie.title}}: {{movie.director}}</p>
+      <img [src]='movie.image_url' />
+    </li>
+  </ul>
+</div>
+As you can see, a list is created using *ngFor to loop through the movies and display them.
+You will now create a new component to represent each displayed movie. Follow the steps below to create the new component:
+
+If you do not already have the AngularL09 folder open in Visual Studio Code, open it now. Otherwise, if you already had it open with the server running, go ahead and stop it (Ctrl + C).
+
+Open the VS Code terminal and run the following to create a new component named DisplayMovieComponent:
+
+ng g c modules/movies/components/display-movie
+Notice that the word movie is singular, that is because you are creating a component for one movie, not all movies.
+You should now have a display-move folder within the modules/movies/components folder.
+
+This new display-movie folder should contain the standard angular component files (ts, html, css).
+Open the movies.module.ts file. The display-movie component has automatically been imported and added to the module's declarations array.
+
+Update DisplayMovieComponent to Display a Movie
+Next, you are going to add the code necessary to display one movie. Follow the below steps:
+
+Open the display-movie.component.ts file.
+
+Import the model Movie.
+
+Within the class DisplayMovieComponent, add a property named movie that is of the type Movie.
+
+Your file should now look like the following.
+
+display-movie.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+
+import { Movie } from '../../../../shared/models/movie';
+
+@Component({
+  selector: 'app-display-movie',
+  templateUrl: './display-movie.component.html',
+  styleUrls: ['./display-movie.component.css']
+})
+export class DisplayMovieComponent implements OnInit {
+  movie: Movie;
+
+  constructor() { }
+
+  ngOnInit() {}
+}
+Open the display-movie.component.html file and replace its contents with the following.
+
+display-movie.component.html file:
+
+<div>
+  <p>
+    {{movie.id + 1}}. {{movie.title}}: {{movie.director}}
+  </p>
+  <img [src]='movie.image_url' />
+</div>
+The code above should look familiar. Apart from the div, this looks very similar to the contents of the display-movies.component.html file. This is because you're moving the presentation of the movie details to this new component.
+Now, open the display-movies.component.html file. Remove the <ul> and <li> elements and instead use the new app-display-movie component. This component will use the *ngFor to loop through the movies. Your HTML should look like the following when complete.
+
+display-movies.component.html file:
+
+<div class="movies">
+  <h2>
+    Movies:
+  </h2>
+  <app-display-movie *ngFor="let movie of movies">
+  </app-display-movie>
+</div>
+Start up both the Angular server and the JSON server.
+
+If you do not recall how to run both at the same time, open the split terminal window in VS Code by clicking the Split Terminal button in the toolbar, to the left of the trashcan button.
+
+In one window, run ng serve to start the Angular server.
+
+In the other window, enter the following to start the JSON server:
+
+json-server --watch mockdb.json
+Once the server is running, open localhost:4200 and click on the Movies button in the navbar.
+
+When you arrive, the page should display, but no movies will be shown. This is because the new component's movie property has not been set. Continue on to learn how to use @Input() so you can correctly display a movie within the display-movies component.
+
+Setting Up the Input
+To correctly display information from the display-movie component within the display-movies component, this is where the @Input() decorator comes in. By adding this decorator to the movie property of the new component, it will tell the system to accept data. Follow the steps below:
+
+Open up the display-movie.component.ts file.
+
+Add the @Input() decorator in front of the movie property, as shown below. You must also add Input to the import statement for @angular/core. Your code should now look like the following.
+
+display-movie.component.ts file:
+
+import { Component, OnInit, Input } from '@angular/core';
+
+import { Movie } from '../../../../shared/models/movie';
+
+@Component({
+  selector: 'app-display-movie',
+  templateUrl: './display-movie.component.html',
+  styleUrls: ['./display-movie.component.css']
+})
+export class DisplayMovieComponent implements OnInit {
+  @Input() movie: Movie;
+
+  constructor() { }
+
+  ngOnInit() {}
+}
+Great! Now the display-movie component is able to receive input. Now, you'll need to provide that data, which is done within the display-movies HTML file. Open the display-movies.component.html file and add the [movie] attribute to the app-display-movie component, as shown below.
+
+display-movies.component.html file:
+
+<div class="movies">
+  <h2>
+    Movies:
+  </h2>
+  <app-display-movie *ngFor="let movie of movies" [movie]="movie">
+  </app-display-movie>
+</div>
+Notice that the [movie]="movie" attribute has been added to the app-display-movie tag.
+This added line sets the new input property movie to the value of movie from the *ngFor loop (which is looping through the controller's array of Movie objects).
+Return to your browser (with both servers running), and you should now see the movies list again!
+
+Lastly, you can update the parent component's CSS file (display-movies.component.css) to center the contents of the div with the movies class.
+
+display-movies.component.css file:
+
+.movies {
+    text-align: center;
+}
+Awesome! You have now seen how you can pass data to a child component by affixing the @Input() decorator to the relevant property of the child component and setting it in the HTML using [input property]="value", in this case, [movie]="movie".
+
+Next, you'll learn how to pass data in the reverse direction.
+
+** A parent component can *only* pass data to a child if the child is _willing_
+** the decorator that is used to def a prop of a comonent as an input from a parent component is:: @Input()
+** the ang pkg that contains the @Input() decorator is :: @angular/core
+** <app-display-song *ngFor="let s of songs" [song]="s"></app-display-song> :: used for if a component DisplaySong has a prop song that is docorated w/ @Input() to provide the input from the parent to the DisplaySong Component
+
+Passing Data from Child Component to Parent Component
+To demonstrate how you can pass data from a child to a parent component, you will be adding a delete button to each movie that is displayed. The goal is to pass data to the parent component, which contains the array of movies, in order to delete the selected movie from the array.
+
+To begin, add a delete button to the DisplayMovieComponent HTML file. You can find the syntax for the delete button below.
+
+display-movie.component.html file:
+
+<div>
+  <p>
+    {{movie.id + 1}}. {{movie.title}}: {{movie.director}}
+    <button (click)="onClickDelete()">Delete</button>
+  </p>
+  <img [src]='movie.image_url' />
+</div>
+As shown above, the following line was added within the <p> element:
+<button (click)="onClickDelete()">Delete</button>
+This line creates a button and sets its on-click handler to the onClickDelete() method, which you will add next.
+Next, open the controller for this component and add the onClickDelete() method as shown below.
+
+display-movie.component.ts file:
+
+import { Component, OnInit, Input } from '@angular/core';
+
+import { Movie } from '../../../../shared/models/movie';
+
+@Component({
+  selector: 'app-display-movie',
+  templateUrl: './display-movie.component.html',
+  styleUrls: ['./display-movie.component.css']
+})
+export class DisplayMovieComponent implements OnInit {
+  @Input() movie: Movie;
+
+  constructor() { }
+
+  ngOnInit() {}
+
+  // Add the following method
+  onClickDelete() {
+    alert("Delete!");
+  }
+}
+Navigate back to the browser. You should now see a delete button to the right of each movie's title and director. If you click the button, you should see an alert saying "Delete!". Try it!
+
+Next, it's time to really delete the movie.
+
+Using Outputs to Pass Data
+Angular components notify parent components that something has changed via events. These events are communicated via an EventEmitter that is declared as an output using the @Output decorator.
+
+The EventEmitter is a generic: EventEmitter<T>. The type T specifies the type of data that will be passed when the event is emitted (you can even use a custom class as the type). For this project, the information that will be needed to delete the selected movie is the movie's ID, which is a number.
+
+Follow the steps below to add the code necessary to use the EventEmitter:
+
+Open the display-movie.component.ts file.
+
+Update the @angular/core import statement to include the EventEmitter and Output, as shown below.
+
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+
+import { Movie } from '../../../../shared/models/movie';
+
+@Component({
+  selector: 'app-display-movie',
+  templateUrl: './display-movie.component.html',
+  styleUrls: ['./display-movie.component.css']
+})
+Next, within the DisplayMovieComponent class, add the @Output() in front of a new property, movieDeleted.
+
+display-movie.component.ts file:
+
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+
+import { Movie } from '../../../../shared/models/movie';
+
+@Component({
+  selector: 'app-display-movie',
+  templateUrl: './display-movie.component.html',
+  styleUrls: ['./display-movie.component.css']
+})
+export class DisplayMovieComponent implements OnInit {
+  @Input() movie: Movie;
+  // Add the following line
+  @Output() movieDeleted: EventEmitter<number> = new EventEmitter();
+
+  constructor() { }
+
+  ngOnInit() {}
+
+  onClickDelete() {
+    alert("Delete!");
+  }
+}
+Above, a new property, movieDeleted, is declared as an EventEmitter and Output.
+The parent component can then listen in on this event for any changes.
+Add the following line to trigger the output event you just created. This line will live within the onClickDelete() method.
+
+display-movie.component.ts file:
+
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+
+import { Movie } from '../../../../shared/models/movie';
+
+@Component({
+  selector: 'app-display-movie',
+  templateUrl: './display-movie.component.html',
+  styleUrls: ['./display-movie.component.css']
+})
+export class DisplayMovieComponent implements OnInit {
+  @Input() movie: Movie;
+  @Output() movieDeleted: EventEmitter<number> = new EventEmitter();
+
+  constructor() { }
+
+  ngOnInit() {}
+
+  onClickDelete() {
+    // add the following line:
+    this.movieDeleted.emit(this.movie.id);
+  }
+}
+When the onClickDelete() method is called (when the user clicks the "Delete" button), it will then call the emit() method which passes in the movie's ID as part of the event.
+Now your display-movie component is set up to emit an event when the delete button is clicked, passing the movie's ID. However, you still need to set up the parent component to listen in on the event.
+
+
+Listening in on Events from the EventEmitter
+For the parent component to listen in on the event, you need to connect the output emitter of its child component, and this is done similarly to connecting the input. Instead of the square brackets [], parenthesis () are used to indicate the output. Further, instead of specifying the property of the child component in quotes, you'll be specifying the parent component's method that will handle the event. Follow the below steps:
+
+Update the parent controller's HTML file to include a (movieDeleted) output, as shown below.
+
+display-movies.component.html file:
+
+<div class="movies">
+  <h2>
+    Movies:
+  </h2>
+  <app-display-movie *ngFor="let movie of movies" [movie]="movie" (movieDeleted)="onMovieDeleted($event)">
+  </app-display-movie>
+</div>
+Only one additional line was added to the app-display-movie block:
+(movieDeleted)="onMovieDeleted($event)">
+(movieDeleted) refers to the event emitter that you added to the display-movie component.
+"movieDeleted($event)" is the method of the display-movies component that will handle the event.
+$event is the parameter that was passed to the emitter in the onClickDelete method of the display-movie component.
+You will be adding that next.
+Open the display-movies.component.ts file and add the following method to the bottom of the DisplayMoviesComponent class.
+
+display-movies.component.ts file:
+
+  ngOnInit() {
+    this.getMovies();
+  }
+  // add the following method:
+  onMovieDeleted(movieId) {
+    let movieIndex = 0;
+    for(let movie of this.movies) {
+      if(movie.id === movieId) {
+        this.movies.splice(movieIndex, 1);
+        break;
+      }
+      movieIndex++;
+    }
+  }
+}
+The above method receives the ID of the movie as an input and then passes it from the child component when the delete button is clicked. It loops through its array of Movie objects until it finds the one with the matching ID, and then deletes it from the array. The display in the browser will automatically update to reflect the change.
+That's it! If you check your browser, you should now be able to delete movies! Since the JSON server is never instructed to delete any data, you can refresh the page to see the list of movies again.
+
+Congratulations! You've now learned the fundamentals for passing data between parent and child components.
+
+
+Requirements
+For this Hands-On, you will add a View button below the movie poster. When clicked, it will pass the image URL of the movie to the parent component, such that it can open it in a new window.
+
+Step 1
+Add a button named View to the display-movie HTML below the movie poster.
+When clicked, it should target a method similar to the method for the Delete button.
+This method must pass in the movie's image url.
+Add a new @Output property that uses the EventEmitter to the DisplayMovieComponent class.
+Hint! The EventEmitter will not be of type number. It will be the same type as the image's url in the model, since you will be passing the image url into the parent component.
+
+Add the method from your View button into the display-movie ts file.
+This method will need to use the necessary property and method.
+Within the display-movies ts file, add a method that will handle opening a new window with the image url. Below, you can find code that will allow for a new window to open with the image url:
+window.open(url);
+Add the necessary code within the <app-display-movie> tag that will target the method within the display-movies component.
+Make sure both servers are running. When the View button is clicked, it should take you to a new page where the movie's poster will be displayed.
+
+
+Below is the solution to the Lesson 9 Practice Hands-On.
+
+display-movie.component.html file:
+
+<div>
+  <p>
+    {{movie.id + 1}}. {{movie.title}}: {{movie.director}}
+    <button (click)="onClickDelete()">Delete</button>
+  </p>
+  <img [src]='movie.image_url' /><br/>
+  <button (click)="onClickView()">View</button>
+</div>
+display-movie.component.ts file:
+
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
+import { Movie } from '../../../../shared/models/movie';
+
+@Component({
+  selector: 'app-display-movie',
+  templateUrl: './display-movie.component.html',
+  styleUrls: ['./display-movie.component.css']
+})
+export class DisplayMovieComponent implements OnInit {
+  @Input() movie: Movie;
+  @Output() movieDeleted: EventEmitter<number> = new EventEmitter();
+
+  @Output() movieViewed: EventEmitter<string> = new EventEmitter();
+
+  constructor() { }
+
+  ngOnInit() {}
+
+  onClickDelete() {
+    this.movieDeleted.emit(this.movie.id);
+  }
+  onClickView() {
+    this.movieViewed.emit(this.movie.image_url);
+  }
+}
+display-movies.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import { of } from 'rxjs';
+import { Movie } from '../../../shared/models/movie';
+
+@Component({
+  selector: 'app-display-movies',
+  templateUrl: './display-movies.component.html',
+  styleUrls: ['./display-movies.component.css']
+})
+export class DisplayMoviesComponent implements OnInit {
+  private moviesRoute = 'http://localhost:3000/movies';
+  public movies: Movie[];
+
+  constructor(private http: HttpClient) {}
+
+  getMovies() {
+    this.http.get<Movie[]>(this.moviesRoute).subscribe(movies => {
+      this.movies = movies;
+      console.log('Movies', this.movies);
+    });
+  }
+  ngOnInit() {
+    this.getMovies();
+  }
+  onMovieDeleted(movieId) {
+    let movieIndex = 0;
+    for(let movie of this.movies) {
+      if(movie.id === movieId) {
+        this.movies.splice(movieIndex, 1);
+        break;
+      }
+      movieIndex++;
+    }
+  }
+  onMovieViewed(url) {
+    window.open(url);
+  }
+}
+display-movies.component.html file:
+
+<div class="movies">
+  <h2>
+    Movies:
+  </h2>
+  <app-display-movie *ngFor="let movie of movies" [movie]="movie" (movieDeleted)="onMovieDeleted($event)" (movieViewed)="onMovieViewed($event)">
+  </app-display-movie>
+</div>
+
+
+
+
