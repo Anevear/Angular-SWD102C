@@ -1,0 +1,457 @@
+Overview
+Routing is conditional rendering based on the state of the application. Meaning that in it's simplest form, routing in Angular changes what template renders based on where the user is in the application. So, depending on what page you are on within the website, a different template will be rendered.
+
+You will be using the Angular Router package for routing and navigation. For this lesson, you will be working with a starter project, located on the following page.
+
+
+Open your new project in VS Code (or you can open the folder within VS Code directly):
+
+code .
+Open the src/index.html file. Notice that the <base> element is located within the <head> element, this allows the router to compose the correct navigation routes by giving it a starting point which all other routes will be created.
+
+src/index.html file:
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PortfolioStarter</title>
+    <base href="/">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <app-root></app-root>
+</body>
+</html>
+Next, you are going to create an AppRoutingModule by using the Angular CLI. The best practice is to create this router in its own top-level module that is dedicated to routing. The AppModule will then import it into the application. To do this, run the following command within the built-in terminal:
+
+ng g m app-routing --flat --module=app
+Below, is a breakdown of the above command:
+ng is the necessary Angular command.
+g is an alias for generate.
+m is an alias for module.
+--flat puts the file within the src/app folder instead of inside a self-titled folder, which you have seen in the past.
+--module=app tells the CLI to register the new module within the imports array of the AppModule.
+Once the above command has successfully run, you can navigate to src/app/app.module.ts to see that AppRoutingModule is now in the imports array.
+
+Your project is now set up for you to start adding routing. Nice work!
+
+Routing Between Components
+You are now ready to start adding routing to your project. Follow the steps below.
+
+To begin, navigate to the newly created AppRoutingModule located in src/app/app-routing.module.ts. Below are several changes you need to make.
+
+First, import Routes and RouterModule from the @angular/router library.
+As you can see in the code below, it is the second import statement listed.
+Next, you need to add the RouterModule to the exports array of the new module.
+This will provide access to the RouterModule and router directives from other parts of the application.
+You can also do some cleanup. For instance, the declarations array of the @NgModule is not needed.
+After making the above changes, your app-routing.module.ts file should now look like the following.
+
+app-routing.module.ts file:
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+
+@NgModule({
+    imports: [
+        CommonModule
+    ],
+    exports: [RouterModule]
+})
+export class AppRoutingModule {}
+Now that the router has been established, you need to start adding Routes, which tells the router which template to display at any given point. A typical Angular Route has two properties:
+
+The path that will be used in the URL within the address bar.
+The component that the router will display.
+The goal is to render each of the components individually based on the URL. To begin, you are going to work with the MessageFormComponent. This component will be rendered when the URL matches http://localhost:4200/message.
+
+To accomplish rendering the MessageFormComponent based on the URL, first import MessageFormComponent into the AppRouterModule. Then, add it as the component to be rendered within an array named routes, as shown below.
+
+app-routing.module.ts file:
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+
+import { MessageFormComponent } from './shared/components/message-form/message-form.component';
+
+const routes: Routes = [
+    {
+        path: 'message',
+        component: MessageFormComponent
+    }
+];
+
+@NgModule({
+    imports: [],
+    exports: [RouterModule]
+})
+export class AppRoutingModule {}
+The routes array is applying the type Routes which was imported in the step above. The array is a collection of objects, and each object represents an individual route.
+Next, you now need to add the RouterModule into the imports array in the AppRouterModule, as shown below.
+
+app-routing.module.ts file:
+
+const routes: Routes = [
+{
+    path: 'message',
+    component: MessageFormComponent
+}
+];
+
+@NgModule({
+    imports: [
+            CommonModule,
+            RouterModule.forRoot(routes)
+    ],
+    exports: [RouterModule]
+})
+export class AppRoutingModule {}
+Within the imports array, you are importing the RouterModule using the .forRoot() method which uses the routes variable.
+The RouterModule, which has been imported, allows you to create navigation between the different components while maintaining information about which routes the user is navigating to. This way you can track where a user has been, and the data they submitted in case they want to go back.
+The forRoot static method, of the RouterModule, creates a module with all of the router providers and directives. The first parameter, routes, is the Routes constant that you created previously.
+The forRoot method also takes a second, optional, parameter for configuring the module. For instance, you can optionally enable tracing or set up an application listener to perform initial navigation.
+The above example is not using the second parameter.
+Since you are going to be using routing, remove the custom components rendered within app.component.html. Instead, you are going to be rendering the router-outlet component. Change your app.component.html file to look like the following.
+
+app.component.html file:
+
+<div id="header">
+<h1>
+    {{ title }}'s Portfolio Page!
+</h1>
+<img alt="Angular Logo" src="../assets/images/margaret.jpg">
+<h3>I was born in {{ city }} in 1936.</h3>
+<h5>Tagline: {{ tagline }}</h5>
+<p>{{ aboutMe }}</p>
+
+</div>
+<router-outlet></router-outlet>
+Adding the above router-outlet component into the HTML file will display what is in the router at any given point.
+Next, start up your server with ng serve. Navigate to localhost:4200 and you should see the following:
+
+Margaret Hamilton's portfolio page. There is a photo of a woman on it and several text boxes where text can be entered. An arrow is pointing to the URL field at the top of the webpage. It says localhost 4200.Figure 7-1: Home Page
+
+Notice how you only see the HTML that is located within the app.component.html file and no other components.
+Navigate to localhost:4200/message. You should continue to see the base HTML as well as the message component, which only contains a form within its HTML, as shown below:
+
+Margaret Hamilton's portfolio page. There is a photo of a woman on it and several text boxes where text can be entered. An arrow is pointing to the URL field at the top of the webpage. It says localhost 4200 message. The text boxes name, email, subject, and message are highlighted.Figure 7-2: Message Page
+
+Now that you have a route established for the MessageFormComponent, add a default route. When an Angular application starts, the browser's address bar automatically points to the web site's root path. Because you have created a GreetingComponent to welcome the user, you will want to use this component when the user navigates to the base route. To add this to your project, add the following import statements as well as the necessary routes to the route array in the AppRoutingModule.
+
+app-routing.module.ts file:
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { RouterModule, Routes } from '@angular/router';
+
+import { MessageFormComponent } from './shared/components/message-form/message-form.component';
+import { SkillsComponent } from './modules/skills/components/skills/skills.component';
+import { GreetingComponent } from './shared/components/greeting/greeting.component';
+
+const routes: Routes = [
+    {
+        path: 'message',
+        component: MessageFormComponent
+    },
+    {
+        path: 'skills',
+        component: SkillsComponent
+    },
+    {
+        path: 'greeting',
+        component: GreetingComponent
+    },
+    {
+        path: '',
+        redirectTo: '/greeting',
+        pathMatch: 'full'
+    }
+];
+Notice that you have also added routes for both the greeting and skills components.
+If the user navigates to the localhost:4200 base route, it will redirect them to the localhost:4200/greeting route.
+
+Great work! Navigate to each of the new routes: localhost:4200/greeting, localhost:4200/skills, and localhost:4200/message. You should see the page change for each of these routes.
+
+Try It!
+Notice that the CSS rules are now broken for the components. Try changing the CSS for the greeting and skills components to center all the elements.
+
+Links
+Now that you have routing in place within your application, it is time to create a navigation bar, this will allow the users to navigate through your application quickly. While it is currently possible to navigate by typing a specific URL, the user experience isn't great and very few people will use your application if that's how it operates. User interaction causes most navigation.
+
+Adding Navigation
+When working with Angular navigation, the HTML nav element has two available attributes to handle this: routerLink and routerLinkActive. Below, is an example of how a navigation bar would look within the app.component.html file using the previously created routes.
+
+app.component.html file:
+
+<div id="header">
+    <nav>
+        <a class="btn" routerLink="greeting" routerLinkActive="active">Home</a>
+        <a class="btn" routerLink="skills" routerLinkActive="active">Skills</a>
+        <a class="btn" routerLink="message" routerLinkActive="active">Message</a>
+    </nav>
+    <h1>
+        {{ title }}'s Portfolio Page!
+    </h1>
+    <img alt="Angular Logo" src="../assets/images/margaret.jpg">
+    <h3>I was born in {{ city }} in 1936.</h3>
+    <h5>Tagline: {{ tagline }}</h5>
+    <p>{{ aboutMe }}</p>
+</div>
+<router-outlet></router-outlet>
+The <a> anchor tag has the following two attributes:
+The routerLink attribute allows the Router to manage the navigation rather than the browser.
+The routerLinkActive attribute distinguishes which link is active at the time. The router adds the active CSS class to the element when the associated routerLink becomes active. This directive can be added to the anchor or to its parent element.
+If you add the code above to your app.component.html file, you should now see the following:
+
+Margaret Hamilton's portfolio page. There is a photo of a woman on it and several text boxes where text can be entered. An arrow is pointing to the URL field at the top of the webpage. It says localhost 4200 message. An arrow is pointing to a line of text at the top of the page that reads home, skills, message.Figure 7-3: Navbar
+
+Adding CSS
+As you can see from the above image, the nav bar is ugly. The class of btn has some CSS applied to it automatically from the internet, but you can update the CSS file to give it the style you want. Below, some CSS is provided for you. Feel free to play with this code to make the buttons fit how you want. If you do not like how the button is styled, change it as you please.
+
+app.component.css file:
+
+#header {
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#header img {
+    max-width: 300px;
+    border: 1px solid black;
+    box-shadow: 2px 5px 2px rgb(166, 166, 166);
+}
+
+h3 {
+    background-color: rgb(210, 203, 216);
+    padding: 4px;
+    border: 1px dotted #e6eff6;
+    margin-right: 600px;
+    margin-left: 600px;
+}
+
+h5 {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+}
+
+p {
+    padding-right: 300px;
+    padding-left: 300px;
+}
+
+router-outlet {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.btn {
+    position: relative;
+    display: inline-block;
+    margin: 40px auto;
+    padding: 0.5%;
+
+    overflow: hidden;
+
+    border-width: 0;
+    outline: none;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+
+    background-color: #669197;
+    color: #d7e2ec;
+    font-size: 1.4em;
+    text-decoration: none;
+
+    transition: background-color 0.3s;
+}
+
+.btn:hover,
+.btn:focus {
+    background-color: #d7a3f5;
+}
+
+.btn > * {
+    position: relative;
+}
+
+.btn span {
+    display: block;
+    padding: 12px 24px;
+}
+
+.btn:before {
+    content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    display: block;
+    width: 0;
+    padding-top: 0;
+
+    border-radius: 100%;
+
+    background-color: rgba(236, 240, 241, 0.3);
+
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.btn:active:before {
+    width: 120%;
+    padding-top: 120%;
+
+    transition: width 0.2s ease-out, padding-top 0.2s ease-out;
+}
+Your page should now look like the following:
+
+Margaret Hamilton's portfolio page. There is a photo of a woman on it and several text boxes where text can be entered. An arrow is pointing to the URL field at the top of the webpage. It says localhost 4200 message. The words home, skills, and message are at the top of the screen in a neat row of boxes.Figure 7-4: Navbar Styled
+
+Try It!
+As the application begins to take shape, customize the CSS and HTML to look how you want it to look. This example is a very basic design, so feel free to make it amazing!
+
+Child Routes
+When you have an array of items, but only want to display the details of one of those items, you will need to create a detail view to display those details. However, you cannot write a new detail component for each of the items in the array since your users will be able to add and remove items from the array at any time. Instead you need to create a detail view that will display the details of any of the items your user selects.
+
+This is a very common scenario in building user interfaces. The user has a list of items to select from, and when they choose one of the items, you want to display the details of the item they selected. In the code example, say your user clicks on one of the skills from the list. You will want to display the details of that skill to the user. But how?
+
+In order for this to happen, the component that displays the list (referred to as the parent) must pass to the detail component (referred to as the child) information about the item that the user selected. This is usually in the form of a unique id for the item that was selected.
+
+When the detail component receives this id it can single out the one item from within the array to display and bind that data to the view.
+
+Please review the documentation provided by the Angular team on Route Definitions with Parameters. This will be on the final for this course.
+
+https://angular.io/guide/router#route-definition-with-a-parameter
+
+Router State
+While navigating in an Angular application, the router builds a "tree" of the routes the user activates. This tree is built of ActivatedRoute objects and makes up what is known as the route state. You can access this from anywhere in the application using the Router service and the routerState property. Each ActivatedRoute in the RouterState provides methods to traverse up and down the route tree to get information from the surrounding nodes. The ActivatedRoute in the route path has a great deal of useful information that is available by injecting they ActivatedRoute service. This service includes the following properties:
+
+Property	Description
+url	An Observable of the various paths that were used to arrive at the current location.
+paramMap	An Observable that contains a map of all the parameters specific to the route, both required and optional.
+queryParamMap	An Observable that contains a map of all the query parameters specific to the route, single and multiple values.
+fragment	An Observable of the URL fragment available to all routes.
+outlet	An Observable of the URL fragment available to all routes. If the outlet is unnamed, the default name is 'primary'.
+routeConfig	The configuration used for the route that contains the origin path.
+Router Events
+During navigation inside an Angular application, the Router releases events through the Router.events property. These events allow you to perform actions based on the point in time during the navigation, ranging from the point navigation starts to the point it ends, and everything in between. Actions are accessed through the following events:
+
+Router Event	Description
+NavigationStart	An event triggered when navigation starts.
+NavigationEnd	An event triggered when navigation ends successfully.
+NavigationError	An event triggered when navigation fails due to an unexpected error.
+NavigationCancel	An event triggered when navigation is canceled.
+Logging Events
+All of these events can be logged to the console when the enableTracing option is enabled. Since the events are provided as an Observable, you can filter() for events of interest and subscribe() to them to make decisions based on the events and the order which they are fired throughout the entire navigation process.
+
+
+** as a user fo an Angular app nav thru the site, the router builds a 'tree' of the routes that have been activated/used
+** the route history of the router(the'tree') is comprised of a number of 
+__ActivatedRoute__ objects
+** The route history of the router can be accessed from *anywhere* in the main ap module
+** routerState :: is the property of the Router service used to access the route history (of ActivatedRoute objects)
+** Router events will be logged to the console when the **enableTracing** option is enabled
+
+Additional Info!
+If you would like to read more about Angular Routing, please visit: https://angular.io/guide/router.
+
+
+
+Requirements
+For this project, you will be adding Routing to a provided project.
+
+Step 1
+Open the L07HandsOn project in VS Code and start the server with ng serve --open. You will only see the following:
+
+A blank webpage with the words The Beatles on it.
+
+Run the necessary command using Angular's CLI tool that will install Angular routing at the base level of your project.
+
+Hint! This command is located towards the beginning of this lesson.
+
+Currently, this project has 3 separate components which are not being rendered. Within the routing module, add the necessary code for routing through the following components:
+
+HomeComponent
+AboutComponent
+AlbumsComponent
+Within the routing module, add the necessary values within the imports and exports arrays.
+
+Each of the above components have either images, information, or both. Add a navigation bar to the base component's HTML file which routes to each of the above components using the designated path.
+
+Hint! The path was determined during the first bullet point.
+
+Style the navigation bar to your liking.
+
+Lastly, be sure to add the necessary component to the base component's HTML to allow for the use of routing.
+
+
+app-routing.module.ts file:
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+
+import { HomeComponent } from './shared/home/home.component';
+import { AboutComponent } from './shared/about/about.component';
+import { AlbumsComponent } from './modules/albums/components/albums/albums.component';
+
+const routes: Routes = [
+  {
+    path: 'home',
+    component: HomeComponent
+  },
+  {
+    path: 'about',
+    component: AboutComponent
+  },
+  {
+    path: 'albums',
+    component: AlbumsComponent
+  },
+
+]
+@NgModule({
+  imports: [
+    CommonModule,
+    RouterModule.forRoot(routes)
+  ],
+  exports: [RouterModule],
+  declarations: []
+})
+export class AppRoutingModule { }
+app.component.html file:
+
+<div id="header">
+  <h1>The Beatles</h1>
+  <nav>
+    <a class="btn" routerLink="home" routerLinkActive="active">Home</a>
+    <a class="btn" routerLink="about" routerLinkActive="active">About</a>
+    <a class="btn" routerLink="albums" routerLinkActive="active">Albums</a>
+  </nav>
+</div>
+<router-outlet></router-outlet>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
