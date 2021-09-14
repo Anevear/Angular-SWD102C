@@ -6,6 +6,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { MessageFormComponent } from './shared/components/message-form/message-form.component';
 import { SkillsComponent } from './modules/skills/components/skills/skills.component';
 import { GreetingComponent } from './shared/components/greeting/greeting.component';
+import { DisplayMoviesComponent } from './modules/movies/display-movies/display-movies.component';
+import { DisplayMusicComponent } from './modules/music/display-music/display-music.component';
 
 const routes: Routes = [
   {
@@ -24,6 +26,14 @@ const routes: Routes = [
     path: '',
     redirectTo: '/greeting',
     pathMatch: 'full'
+  },
+  {
+    path:'movies',
+    component: DisplayMoviesComponent
+  },
+  {
+    path:'music',
+    component: DisplayMusicComponent
   }
 ];
 

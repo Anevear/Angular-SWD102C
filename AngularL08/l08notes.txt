@@ -1,0 +1,355 @@
+A Uniform Resource Locator (URL) reps the unique inet addy of a spec rsrc on the inet. A web rsrc may be a physical file but typically its a dynam ically computed result that is programmatically gen by a svr-side code based on the content of the inc request msg.
+
+A url spec a unique srvr loc on the inet in the form of an IP addy of a domain name. the URL spec the protocol(aka scheme) followed by the domain name (aka hostname). the domain name them maps to the phys IP addy fo the spec host srvr that prov the requested rsrc, that is then followed by the path to the actual rsrc residing on that srvr.
+
+http://www.mydomain.com/mypath/mypage.html
+
+http :: protocol
+www.mydomain.com :: domain name
+mypath/mypage.html :: rsrc path
+
+with mypage.html being the rsrc itself
+
+now every HTTP URL conforms to a set of syntax rules
+protocol:[//[user:password@]host[:port]][/]path[?query][#fragment]
+
+so:: http:[//[mydomain].com[:8080]][/]mypath/mypage.html[?param=val][#fragment]
+
+the fragment can be used when you only want a piece of the page not necessarily the entire thing so literally a fragment of the page
+
+**A URL is a spec type of Uniform Resource Identifier (URI). most ppl use the 2 terms interchangeably its a subtle diff. Its webbrowsers that always disp the URL fo the currently disp webpg in the addy bar
+
+>>>>> Domain Names, IP addys & DNS
+
+URL's can disp protocols other than http and https (FTP,mailto not covered yet) now the 's' in https stands for secure, its the secure ver of http and it uses various cryptographic techs to protect the confidentiality and integrity of data as well as to auth the id of communicating parties. in short https protects the data you send/receive w/ a comm party from a 3rd party eavesdropper. the data cnt be tampered w/ in xit and you know w/ whom you are comm w/ ne1 who works w/ data is concerned w/ security
+ theres a fair amt of var10 in what constitues as a valid url. they dnt always have to have 'www.' nor the '.html' file ext at the end of the path for ex:: https://en.wikipedia.org/wiki/Main_Page
+
+The domain name/hostname is actually xlatd into an IP addy by the parallel inet protocol, Domain Name Sys (DNS). Most URL's specify the tar srvr using a human-readable domain name that is meaningful and easy to recog/remember. When you reg ur domain for a new website that name goes n2 a world-wide distr. look-up serv. for ex:: eZ domainName:microsoft.com, the IP addy:[http://23.96.52.53]
+
+>>> Port Num
+
+URL's can also spec port num, which id's the spec HTTP srvr process runnign on the tar srvr. there cld b more than 1 proc running on a partic srvr mach. as long as tehy ea hv a unique port num the running proc can be id by adding the port nnum to the URL. Evry inet protocol has its own default prot num def for its excl use. Default for HTTP:80 and HTTPS:443. if you omit the HTTP port num then it will assume the default port following is an ex where the port number is explicitly set :: [http://www.mydomain.com:8080/mypath/mypage.html
+
+>>> Resource Path:: indicates the spec rsrc to access on the tar web srvr
+
+some cases it reps a physical file that is spec as a rel. file sys path under the web srvrs root folder. in other cases the rsrc path portion of the URL reps a more abst rep tht must be parsed and interp. by the web app to det what to obtain/generate to send back the the client(browser) in the resp msg.
+
+
+>>>> Query Strings and Fragment Identifiers
+the URL also allows for an opt trailing ? or # symbol. The ? allows the URL to pass add. info in the form of "query params" which are a list of 1+ name-val pairs. the # alloes the URL to spec a frag id the prov direction to a newsted rssrc offset such as a section heading w/i a webpg. the following has 3 name=value pairs :: [http://www.mydomain.com/mypath/mypage?firstname=Jame&lastname=Smith&age=30
+
+
+https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL
+
+>>>>>>>>> Request and Response Format <<<<<<<<<
+There is more than just the URL that goes thru an HTTP request
+>> HTTP Msg Body :: (for requests & resp)the msg body contains the payload data w/i a request or resp msg. when a form on a web pg is subm the body of the request msg will contain w/e data you enterd n2 to the form and this is all avail in srvr-side code.
+>>HTTP Verbs :: requests ONLY (requesting the server do something) these are methods() that are used to indicate what the srvr is supposed to do when a request msg is received. Ea HTTP verb idicated the desired action. the most common HTTP verbs are [GET, POST, PUT, DELETE].
+	GET :: this only retrieves data from a spec rsrc; like querying a database to read 1/+ records
+	POST :: this requests that the server accepts and then creates data; like adding a new record (employee, product, etc)
+	PUT :: this requests that the server accepts/replace some data on the srvr; like changing an addy or a price
+	DELETE :: request that a spec rsrc is del; like del 1/+ records. This process is destructive and should nvr b an open rte to a user that hasnt been auth. In most cases the info is never truly del since the cost of storage keeps gng dn and many companies pref to keep the val data. Inst recoreds are marked as 'del' but it still exists w/i the database, likely as a history (former employee, discont. prod
+>> Headers :: (for requests & resp) add fields of info passed along w/ both HTTP requests/responses. Most commonly used to xmit info abut the request such as the length of content, the format of the body, who is making the request, and who is the client app making the request. They can be ant key/val pair so long as both the client and Srvr aggree. Most common headers are :::
+	Access-Control-Allow-Origin :: spec which sites can mk requests to the srvr
+	Content-Length :: the num of chars in the body of the resp
+	Content-Type :: the type of the media contained in the request (audio, video, images)
+	Authorization :: basic credentials for auth (usually a Base64 encoded string)
+By convention these xtra fields of data are intended to xmit info *abt* the request/resp. They can also be used to contain the request/resp info itself. As for the more complex info (ie obj, arrays)it is common to put those in the body fo the request/resp. That aside, so long as the client/srvr agree on the format of the request/resp data can be xmit in any format desired
+>> Status Codes ::(only for resp) returned from the srvr -> client to indicate either success or failure info. they are div n2 5 categories ::
+	Informational :: 1XX 
+	Successful :: 2XX (200 means success)
+	Rediraction :: 3XX (301 means redirect)
+	Client Err :: 4XX (404-not found, 403-forbidden[ur creds arent allowed])
+	Server Err :: 5XX (500-internal server err[the svr prob not a you prob])
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+
+
+Consuming HTTP Routes
+In this section, you will create a new module for your application that will display movies. To do this, the module will need to be imported to your main app and have a component to fetch, process, and display the data from the server you created previously.
+
+Please note, some of the steps are adding code that you have previously learned about and doesn't have much explanation. Please, review previous topics if some of the code below doesn't make sense. Good luck!
+
+Create Movies Module
+Follow the below steps to create the Movies module.
+
+Create a Movies module by running the following command in your VS Code terminal:
+
+ng g m modules/movies
+You will now have a new module folder and file inside src/app/modules.
+Create a display movies component by running the following command:
+
+ng g c modules/movies/display-movies
+You will now have a new component folder with the generated files inside src/app/modules/movies.
+Export the DisplayMoviesComponent component from the movies.module.ts file so the router can import it.
+
+movies.module.ts file:
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { DisplayMoviesComponent } from './display-movies/display-movies.component';
+
+@NgModule({
+    imports: [CommonModule],
+    declarations: [DisplayMoviesComponent],
+    exports: [DisplayMoviesComponent]
+})
+export class MoviesModule {}
+Add an import statement to import the DisplayMoviesComponent as well as a new route to app-routing.module.ts to allow for routing to localhost:4200/movies.
+
+app-routing.module.ts file:
+
+// ...
+
+import { GreetingComponent } from './shared/components/greeting/greeting.component';
+//add the below import statement
+import { DisplayMoviesComponent } from './modules/movies/display-movies/display-movies.component';
+
+const routes: Routes = [
+    {
+        path: 'message',
+        component: MessageFormComponent
+    },
+    {
+        path: 'skills',
+        component: SkillsComponent
+    },
+    {
+        path: 'greeting',
+        component: GreetingComponent
+    },
+    {
+        path: '',
+        redirectTo: '/greeting',
+        pathMatch: 'full'
+    },
+    // add the below object:
+    {
+        path: 'movies',
+        component: DisplayMoviesComponent
+    }
+];
+
+@NgModule({
+    imports: [  
+Next, add a new anchor tag to the nav bar within the app.component.html file so you can link to the movies route.
+
+app.component.html file:
+
+<div id="header">
+<nav>
+    <a class="btn" routerLink="greeting" routerLinkActive="active">Home</a>
+    <a class="btn" routerLink="skills" routerLinkActive="active">Skills</a>
+    <a class="btn" routerLink="message" routerLinkActive="active">Message</a>
+    <!-- add the below anchor tag -->
+    <a class="btn" routerLink="movies" routerLinkActive="active">Movies</a>
+    </nav>
+<h1>
+    {{ title }}'s Portfolio Page!
+</h1>
+<img alt="Angular Logo" src="../assets/images/margaret.jpg">
+<h3>I was born in {{ city }} in 1936.</h3>
+<h5>Tagline: {{ tagline }}</h5>
+<p>{{ aboutMe }}</p>
+
+</div>
+<router-outlet></router-outlet>
+Import the MoviesModule to the app.module.ts file and add it to the imports array.
+
+app.module.ts file:
+
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { AppComponent } from './app.component';
+import { GreetingComponent } from './components/greeting/greeting.component';
+import { MessageFormComponent } from './components/message-form/message-form.component';
+
+import { SkillsModule } from './modules/skills/skills.module';
+import { AppRoutingModule } from './app-routing.module';
+//Add the below import statement
+import { MoviesModule } from './modules/movies/movies.module';
+
+@NgModule({
+    declarations: [AppComponent, GreetingComponent, MessageFormComponent],
+    //The MoviesModule is added into the imports array:
+    imports: [BrowserModule, FormsModule, SkillsModule, AppRoutingModule, MoviesModule],
+    providers: [],
+    bootstrap: [AppComponent]
+})
+export class AppModule {}
+Next, within the terminal that is not running the json server, run ng serve and click on the movies navbar button. If you are greeted with display-movies works!, as shown below, then you are ready to edit this module and add in the ability to make HTTP requests.
+
+Margaret Hamilton's portfolio page. There is a photo of a woman on it An arrow is pointing to the text display movies works on the lower left side of the screen.Figure 8-5: Display Movies Works
+
+Continue on to enable HTTP within your project!
+
+Using HttpClient
+To display the movies, it is important that Angular knows what a movie object looks like. You will need to create a movie model. Navigate to the model's folder located in src/app/shared/models and create a new file called movie.ts. Once created, add the following Movie class.
+
+movie.ts file:
+
+export class Movie {
+    id: number;
+    title: string;
+    director: string;
+    image_url: string;
+}
+To enable the HttpClient, you need to import the HttpClientModule in the MoviesModule, and include it within the imports array. For this to happen, there is no installation required because the module already comes prepackaged with Angular. Add the following HttpClientModule import statement and then add it to the imports array, as shown below.
+
+movies.module.ts file:
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+
+import { DisplayMoviesComponent } from './display-movies/display-movies.component';
+
+@NgModule({
+    imports: [CommonModule, HttpClientModule],
+    declarations: [DisplayMoviesComponent],
+    exports: [DisplayMoviesComponent]
+})
+export class MoviesModule {}
+Open the modules/movies/display-movies/display-movies.component.ts file and import the Angular HttpClient. This will be used to access to HTTP request methods. The request methods on the HttpClient will be returning Observables of the data from the server. You then need to import the newly created Movie model as well so that we can pass the Movie type to the methods of the HttpClient. Below, the two new import statements are shown.
+
+display-movies.component.ts file:
+
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import { Movie } from '../../../shared/models/movie';
+
+@Component({
+    selector: 'app-display-movies',
+    templateUrl: './display-movies.component.html',
+    styleUrls: ['./display-movies.component.css']
+})
+export class DisplayMoviesComponent implements OnInit {
+    constructor() {}
+
+    ngOnInit() {}
+}
+Within the DisplayMoviesComponent class, add a moviesRoute and a movies property, as shown below.
+
+display-movies.component.ts file:
+
+export class DisplayMoviesComponent implements OnInit {
+    private moviesRoute = 'http://localhost:3000/movies';
+    public movies: Movie[];
+
+    constructor() { }
+
+    ngOnInit() {
+    }
+}
+The private moviesRoute property is set to the route which holds the JSON array of movie objects. With this property, you will be able to access those movies.
+The public movies property is set to the model Movie with the type array.
+Next, within the constructor, set a property http to the imported HttpClient.
+
+display-movies.component.ts file:
+
+export class DisplayMoviesComponent implements OnInit {
+    private moviesRoute = 'http://localhost:3000/movies';
+    public movies: Movie[];
+
+    constructor(private http: HttpClient) {}
+
+    ngOnInit() {
+    }
+}
+This will allow you to access the CRUD methods within HttpClient. These methods will then be accessible to the observable using dot notation, which you will add next.
+Next, add a method named getMovies() that includes an observable.
+
+display-movies.component.ts file:
+
+export class DisplayMoviesComponent implements OnInit {
+    private moviesRoute = 'http://localhost:3000/movies';
+    public movies: Movie[];
+
+    constructor(private http: HttpClient) {}
+
+    getMovies() {
+        this.http.get<Movie[]>(this.moviesRoute).subscribe(movies => {
+            this.movies = movies;
+            console.log('Movies', this.movies);
+        });
+    }
+    ngOnInit() {
+        this.getMovies();
+    }
+}
+Within the getMovies() method, you are accessing the HTTP method GET by using dot notation to "get" the moviesRoute property.
+The observable is then allowed to come in and pass the movies into the callback function, .subscribe()
+Within .subscribe() is where this.movies can be assigned the values that come back from the server.
+For the time being this.movies is being logged to the console to verify that the code above it is returning the values as expected, this is a convenient way to code because it eliminates the HTML parsing from the equation which allows you to know that any problems are not HTML related.
+Currently, your json-server should be running. If it is not, run the following commands to start both the Angular server and the json-server. Remember to run these in the two terminals you have open in your VS Code terminal.
+
+Angular:
+
+ng serve
+json:
+
+json-server --watch mockdb.json
+Navigate to localhost:4200 and you should still see "display-movies works!" on the page. However, if you open the console, you should see a Movies array with three objects. Click the array to expand the array, and you should see the following:
+
+Margaret Hamilton's portfolio page. There is a photo of a woman on it An arrow is pointing to the text display movies works on the lower left side of the screen. Below the webpage are several lines of code. An arrow is pointing to the lines that indicate movies returned. There are three lines of code that are labeled array.Figure 8-6: Movies Returned
+
+Bind Data to HTML
+Now that you have verified that the data is coming from the server and is being logged to the console, the next step is to bind the movies data to the display-movies.component.html, this is done just like it was done in the previous lessons: by using *ngFor to loop through the movies array and render the data to the page. Below is the HTML needed, however, it is up to you to make it beautiful.
+
+display-movies.component.html file:
+
+<div class="movies">
+  <h2>
+    Movies:
+  </h2>
+  <ul>
+    <li *ngFor="let movie of movies">
+      <p>{{movie.id + 1}}. {{movie.title}}: {{movie.director}}</p>
+      <img [src]='movie.image_url' />
+    </li>
+  </ul>
+</div>
+Part of a webpage that is showing icons representing different movies.Figure 8-7: Movies Rendered
+
+There you have it! You have successfully used the HTTP GET method to get data from a separate server. Nice work!!
+
+Requirements
+Step 1
+Create a new module named music.
+Create a component named display-music that should live within the music module folder.
+Within the routing module, add a new object so you can route to the path music.
+Don't forget the necessary import statement so you can access the DisplayMusic component within the object.
+Create a model for the music within the appropriate folder.
+Within the music.module.ts file, add the necessary import statements and any needed values within the arrays.
+Hint! You will need to add the exports array.
+
+Within your base component, add the necessary import statements and any needed values within the arrays.
+Within the display-music component, add the necessary properties and methods to implement a get route to display all the entries from the music array.
+Display all music within the display-music HTML file.
+You will need to look at the JSON to know the fields within the JSON objects that need to be displayed.
+You do not need to display the video, just the title of the song.
+Add the necessary element so you have a Music tab within the navbar.
+Lastly, start up both the Angular server and the json server and confirm everything works correctly.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
