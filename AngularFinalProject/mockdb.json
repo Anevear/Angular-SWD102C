@@ -1,0 +1,28 @@
+{
+    "task":[
+       {
+                "id":0,
+                "name":"Need",
+                "duration":"3-5 minutes",
+                "description":"Task one is to identify a need that you believe can be stream-lined, or a need that has been brought to your attention. It must be clearly stated."   
+       },
+       {
+                "id":1,
+                "name":"Audience",
+                "duration":"1-2 minutes",
+                "description":"Task two is to determine who would most benfit from the addressed need? How many people or organizations would be able to utilize said need? the bigger the better."
+       },
+       {
+                "id":2,
+                "name":"Utilization",
+                "duration":"5-10 minutes",
+                "description":"Task three is to figure out how your target audience can use and maintain the tools that can help stream-line the previously defined need."  
+       },
+       {
+                "id":3,
+                "name":"Implementation",
+                "duration":"1-7 Days",
+                "description":"Aside from yourself, how many people would it take to program and subsequently train others when it's launched."
+       }
+    ]   
+}

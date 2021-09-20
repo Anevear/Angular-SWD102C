@@ -1,0 +1,8 @@
+<div>
+  <p *ngFor="let t of task; let i=index;" class="tasked">
+    {{t.id+1}}. <strong>{{t.name}}</strong>  <br>
+    Duration: {{t.duration}} <br>
+    Description: {{t.description}} <br>
+    <button (click)="deleteTask(i)">Delete</button>
+  </p>
+</div>

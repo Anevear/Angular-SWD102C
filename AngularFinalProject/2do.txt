@@ -1,7 +1,0 @@
-json database file
-run json server
-read items from database
-list components (skills)
-services
-skill details
-detail component
